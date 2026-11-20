@@ -153,7 +153,10 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
   1.7B Q4_K_M（v1，1,107,408,832 字节，SHA256 `8d349e17…22df01`）由 CI 从
   GitHub Release（tag `model-17b-q4km-v1`，分 4 片下载、合并后 SHA256 校验）
   下载、打进 assets、随 APK 发布；CI 已绿并发布 v0.3-c75a120
-  （APK 1,863,920,972 字节 ≈ 1.74 GiB，未超 2 GiB 上限）；
+  （APK 1,863,920,972 字节 ≈ 1.74 GiB，未超 2 GiB 上限）；本地已下载该
+  Release APK 拆包核对：包内 `assets/banpai-17b-q4_k_m.gguf` SHA256 与
+  `8d349e17…22df01` 一致、APK 签名 SHA1 与固定 debug 值
+  `92:94:48:3F…C7:68` 一致；
   花语聊天屏（`ChatScreen.kt`）走“兜底 → 模型”顺序回答，模型没就绪不假装回答。
 - **瘦身（2026-11-20）**：为压体积暂去 armeabi-v7a，只支持 arm64-v8a（目标机
   OnePlus Ace 2 是 arm64）；正式版如需覆盖老机型可恢复 `abiFilters`。
