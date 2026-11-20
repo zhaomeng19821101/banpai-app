@@ -1,0 +1,10 @@
+#!/bin/sh
+# 半拍 Banpai — gradlew 占位脚本
+# 注意：本文件是占位说明脚本，不是真正的 Gradle Wrapper 启动脚本。
+# 正式使用：请在已安装 Android Studio + JDK 17 + Android SDK 34 的机器上，
+# 用 Android Studio 打开本工程后由 IDE 生成标准 gradle-wrapper.jar / gradlew，
+# 或执行 `gradle wrapper --gradle-version 8.7` 生成。
+# 本机无 Java/Gradle，未跑 gradle build（见 README_APP.md）。
+echo "gradlew 占位：请用 Android Studio 打开工程后生成标准 Wrapper 再编译。"
+echo "需要：JDK 17、Android SDK 34、local.properties（见 local.properties.example）。"
+exit 1

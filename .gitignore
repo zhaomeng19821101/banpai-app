@@ -1,0 +1,11 @@
+# Banpai new scaffold — never commit secrets or build outputs
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+banpai.db
+.env
+local.properties
+*.keystore
+build/
+.pio/

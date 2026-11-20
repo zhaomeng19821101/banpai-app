@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 昼夜三档在 Compose Theme.kt 里实现；此处仅保留启动主题占位。 -->
+    <style name="Theme.Banpai" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>

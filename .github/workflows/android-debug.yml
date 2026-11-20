@@ -1,0 +1,69 @@
+# 半拍 Banpai — GitHub Actions 自动编 debug APK（2026-11-20 Jackson 定：走 GitHub）
+#
+# 用法：把 ~/workspace/banpai-code 整个推到 GitHub 仓库。
+# 公开仓库：标准 Linux runner 免费无限，4 vCPU / 16 GB；
+# 私有仓库：每月 2000 分钟免费，2 vCPU / 8 GB，也够编 debug 包。
+# 每次 push 到 main/master 或手动触发，都会编出 app-debug.apk（保留 7 天），
+# 在 Actions → 该次运行 → Artifacts 里下载。
+#
+# 注意：
+# - 不用 gradlew：工程里的 gradlew 目前是占位脚本（本机 Gradle daemon 起不来，
+#   没能生成标准 wrapper；Android Studio 打开工程后可生成）。CI 直接用
+#   gradle/actions/setup-gradle 装 Gradle 8.7，用 `gradle` 命令编译。
+# - 不需要任何密钥：local.properties 缺省时 AMAP_KEY / AGORA_APP_ID 为空串，
+#   探索页显示占位、派对语音占位。不要把真 key 提交进仓库。
+# - 这只是新框架骨架 v0.1：16 屏可点，高德/声网 SDK 还没接，地图页是占位。
+
+name: Android Debug APK
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'app/**'
+      - '.github/workflows/android-debug.yml'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'app/**'
+  workflow_dispatch:
+
+jobs:
+  build-debug:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK 34
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "platforms;android-34" "build-tools;34.0.0"
+
+      - name: Set up Gradle 8.7
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Build debug APK
+        run: gradle assembleDebug --no-daemon --stacktrace
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: banpai-app-debug
+          path: app/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 7
+          if-no-files-found: error

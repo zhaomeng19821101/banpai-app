@@ -1,0 +1,9 @@
+# 半拍 Banpai — local.properties 占位示例
+# 复制为 local.properties 后填入真实值。不要把真实 key 提交进仓库。
+# Android SDK 路径（本机示例，按实际安装改）：
+# sdk.dir=/Users/jackson/Library/Android/sdk
+# 高德地图 Key（无 key 时 Explore 页显示占位说明，不画假地图）：
+AMAP_KEY=
+# Agora App ID（派对语音占位）：
+AGORA_APP_ID=
+# 后端地址默认 http://10.0.2.2:8000/api/v1（见 data/ApiClient.kt），一般不用改。

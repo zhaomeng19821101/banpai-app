@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 半拍 Banpai — 启动图标前景占位（矢量四瓣简形，正式图标接入美术资源后替换） -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#C9BDF0"
+        android:pathData="M54,14 C66,34 66,44 54,54 C42,44 42,34 54,14 Z" />
+    <path
+        android:fillColor="#7FC4E8"
+        android:pathData="M54,94 C66,74 66,64 54,54 C42,64 42,74 54,94 Z" />
+    <path
+        android:fillColor="#C9BDF0"
+        android:pathData="M14,54 C34,42 44,42 54,54 C44,66 34,66 14,54 Z" />
+    <path
+        android:fillColor="#F5C97B"
+        android:pathData="M94,54 C74,42 64,42 54,54 C64,66 74,66 94,54 Z" />
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M54,54 C58,46 58,40 54,34 C50,40 50,46 54,54 Z" />
+</vector>
