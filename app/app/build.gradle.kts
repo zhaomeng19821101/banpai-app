@@ -1,6 +1,8 @@
 // 半拍 Banpai — app 模块 build.gradle.kts
 // 包名 com.banpai.app；Kotlin + Jetpack Compose；minSdk 26 / targetSdk 34。
 // 目标机型：一加 Ace 2（1240×2772，20:9，约 412×924 dp）。
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -22,7 +24,11 @@ android {
         }
         // 高德 Key 占位：local.properties 配 AMAP_KEY 后注入 BuildConfig；
         // 无 key 时 Explore 页只显示占位说明。不要把真 key 写进代码。
-        val localProps = java.util.Properties()
+        // 注意：Gradle Kotlin DSL 脚本里不能写 java.util.Properties()，
+        // 因为 java 这个名字被 Gradle 的 Java 插件扩展占了，会报 Unresolved reference: util；
+        // 必须用文件顶部的 import java.util.Properties 再直接写 Properties()。
+        // （2026-11-20 CI 第四跑的教训。）
+        val localProps = Properties()
         val localFile = rootProject.file("local.properties")
         if (localFile.exists()) localFile.inputStream().use { localProps.load(it) }
         buildConfigField("String", "AMAP_KEY", "\"${localProps.getProperty("AMAP_KEY", "")}\"")
