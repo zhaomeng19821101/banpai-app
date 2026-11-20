@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -131,7 +133,7 @@ fun BanpaiNavGraph(
                                 },
                                 icon = {
                                     Icon(
-                                        imageVector = androidx.compose.material.icons.Icons.Filled.LocationOn,
+                                        imageVector = Icons.Filled.LocationOn,
                                         contentDescription = label
                                     )
                                 },
