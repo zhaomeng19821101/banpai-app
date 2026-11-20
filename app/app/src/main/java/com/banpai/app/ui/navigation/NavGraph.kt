@@ -131,7 +131,7 @@ fun BanpaiNavGraph(
                                 },
                                 icon = {
                                     Icon(
-                                        imageVector = androidx.compose.material.icons.Icons.Default.Place,
+                                        imageVector = androidx.compose.material.icons.Icons.Default.LocationOn,
                                         contentDescription = label
                                     )
                                 },
