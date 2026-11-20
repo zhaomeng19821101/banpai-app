@@ -7,5 +7,17 @@ banpai.db
 .env
 local.properties
 *.keystore
+# 例外：固定 debug keystore 不是机密（标准 android/android 口令），
+# 必须进仓库，否则 CI 每次构建签名 SHA1 都变（见 app/debug.keystore）。
+!app/debug.keystore
 build/
 .pio/
+# 端侧模型：不进 git（1.1 GB，超 GitHub 100 MB 单文件上限），
+# CI 从 Release（tag model-17b-q4km-v1）下载到 assets 再打包。
+app/app/src/main/assets/*.gguf
+# llama.cpp 源码：不进 git，CI 按 pin 的 commit 现 clone 到 cpp/llama.cpp。
+app/app/src/main/cpp/llama.cpp/
+# Gradle / Android 构建产物
+.gradle/
+app/app/build/
+app/build/

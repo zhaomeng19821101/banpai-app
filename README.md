@@ -1,8 +1,9 @@
 # 半拍 Banpai · 新工程骨架（从 UI 框架 v3 从头建）
 
 > 决定：2026-11-20 04:05，用户决定从新框架从头建一个，**不沿用**电脑上那份 67 次提交的旧代码。
-> 本目录是可编译、可扩展的三端骨架，不是成品：后端已在本机跑通启动 + 14 个测试；
-> App 与固件因本机缺少工具链/实板，尚未真编译，见下文“未验证”清单。
+> 当前状态（2026-11-20 晚）：**管线验证版 + v1 模型**——App v0.3 已在 GitHub Actions
+> 多次编绿并发布；端侧 1.7B（Q4_K_M，v1）已内置，花语走 llama.cpp 端侧推理。
+> 固件因本机缺少工具链/实板，尚未真编译，见下文“未验证”清单。
 > 全部密钥一律只用占位符，本仓库里没有任何真实 key、证书、keystore。
 
 ## 目录
@@ -107,7 +108,7 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
 
 | Key / 配置 | 在哪配 | 没配时会怎样 |
 |---|---|---|
-| `AMAP_KEY` | `app/local.properties`、后端 `.env` | 无 Key 时探索页显示占位说明，不画假地图；后端路线接口返回直线距离占位。**已接通**：高德 SDK 本地内置（`app/app/libs/` 合包 JAR + `src/main/jniLibs/` .so，3D 地图 11.3.100，官网一键下载包 2026-09-24；因 `maven.amap.com` 在 CI 上连不上，见 run 44695000131）。**注意：Key 只登记了 release SHA1，CI 出的 debug 包地图仍会是黑的**——预期内；真机验地图要打 release 包，或在高德控制台补登记 debug SHA1 |
+| `AMAP_KEY` | `app/local.properties`、后端 `.env` | 无 Key 时探索页显示占位说明，不画假地图；后端路线接口返回直线距离占位。**已接通**：高德 SDK 本地内置（`app/app/libs/` 合包 JAR + `src/main/jniLibs/` .so，3D 地图 11.3.100，官网一键下载包 2026-09-24；因 `maven.amap.com` 在 CI 上连不上，见 run 44695000131）。**debug SHA1 已固定**（2026-11-20）：CI 不再用临时 keystore，改用仓库里的 `app/debug.keystore`（标准 android/android 口令，非机密），每次构建签名 SHA1 都是 `92:94:48:3F:DA:14:78:B6:A3:6B:C5:A3:03:01:C4:05:87:B4:C7:68`，高德控制台登记这一个 debug SHA1 即可；CI 每次构建后都会核对 APK 签名 SHA1，对不上就失败。Key 只登记了 release SHA1 时，debug 包地图仍会是黑的——预期内；真机验地图要打 release 包，或在高德控制台补登记上面这个 debug SHA1 |
 | `AGORA_APP_ID` / `AGORA_APP_CERTIFICATE` | App `local.properties` / 后端 `.env`（证书只留服务端） | 未配置时 token 接口返回占位串，语音入会不可用。**范围（2026-11-20 用户锁定）**：公共区域（派对房间 / 公共花园）不用声网实时语音；只给好友 1:1 实时对讲（好友对讲控件）用。**TokenBuilder 已接通**：后端用 `agora-token-builder` 签发真实 006 格式 token（24 个后端测试含 5 个 token 用例，全过） |
 | `SMALL_MODEL_URL` / `SMALL_MODEL_API_KEY` | 后端 `.env` | 花语用本地锁定回答 / “我还小，帮你去打听”口径 |
 | `JWT_SECRET` | 后端 `.env` | 当前为开发占位串，部署前必须换随机长串 |
@@ -140,13 +141,46 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
 | App 相机 CameraX、BLE 真机、登录短信/微信 | 占位（待 key + 真机） |
 | 声网：好友 1:1 实时对讲（好友对讲控件）+ 后端真实 token 签发 | 已接通（代码层 + 24 测试）；**双人真机对讲待验证**（需登录接通 + 两台真机） |
 | 声网：公共区域（派对房间 / 公共花园）实时语音 | **已取消**（2026-11-20 用户锁定：合规风险）；派对房间只用异步语音消息 |
+| 花语端侧小模型 1.7B Q4_K_M（v1，管线验证版） | 已接通（代码层 + CI 打包）；**真机花语实测待验证**（见下节） |
 | 固件 BLE 8 特征、菜单 8 功能页、敲击记分、OTA 双分区 | 骨架已接通（代码层），驱动层全部 `TODO(HW)` 占位 |
 | 固件 CO5300 屏驱、QMI8658、 CST9217、AXP2101 电量 | 占位（Serial stub / 假值，实测前不要采信电量） |
-| 素材 | **v0.2 已全量内置**：`app/app/src/main/assets/` 261 个文件、571.1 MB（图片 + 守护宠视频 + 绿幕视频，离线可看；清单 `assets-manifest.json`，打包脚本 `tools/stage_assets.py`）。APK 约 600 MB，CI 改走 GitHub Release 附件（`v0.2-<短 commit>`），artifact 上传会超免费额度 |
+| 素材 | **v0.3 已全量内置**：`app/app/src/main/assets/` 261 个文件、571.1 MB（图片 + 守护宠视频 + 绿幕视频，离线可看；清单 `assets-manifest.json`，打包脚本 `tools/stage_assets.py`）。APK 约 885 MB（不含模型），CI 改走 GitHub Release 附件（`v0.3-<短 commit>`），artifact 上传会超免费额度。带模型版约 2.0 GB，见下节 |
+
+## 花语端侧模型（管线验证版，2026-11-20）
+
+- **这次验证了什么**：llama.cpp（JNI，`app/app/src/main/cpp/`，pin 在提交
+  `4c4a0f0a4246bc36a3724d12238d5624714dcb2f`，与评测同一份源码）能编进 APK；
+  1.7B Q4_K_M（v1，1,107,408,832 字节，SHA256 `8d349e17…22df01`）由 CI 从
+  GitHub Release（tag `model-17b-q4km-v1`）下载、打进 assets、随 APK 发布；
+  花语聊天屏（`ChatScreen.kt`）走“兜底 → 模型”顺序回答，模型没就绪不假装回答。
+- **引擎选择**：llama.cpp，不选 MLC LLM——GGUF 原生加载，无需转格式；MLC 要额外
+  转模型格式，这次只验证管线。API 以 clone 下来的 `include/llama.h` 为准
+  （`llama_model_load_from_file` + `llama_init_from_model` + `llama_batch_ext` +
+  `llama_process` + `llama_sampler_*`），见 `banpai_llama_jni.cpp` 注释。
+- **App 侧五项兜底**（`data/BanpaiGuardrails.kt`，跑模型之前先过，按优先级）：
+  (1) 第五瓣拦截——含“第五瓣/第五片/第5瓣/吧唧背面”一律挡回锁定台词 #4，
+  绝不透露位置（最高红线）；(2) think-strip——去 `<think>…</think>` 与
+  `[Start thinking]…` 及残留单标签，去完为空回锁定台词 #1；(3) 15 条锁定台词
+  lookup（关键词命中直出原句）；(4) 唱歌请求固定拒绝（半拍只说话、不唱歌）；
+  (5) 马迭尔/红肠事实 lookup（红肠是秋林里道斯/哈肉联的，马迭尔是冰棍+西餐厅）。
+- **模型已知毛病**（v1，评测 20 题只过 9.5 题，见
+  `~/workspace/banpai/small-model/eval-17b-q4km-2026-11-20.md`）：马迭尔/红肠
+  归属错、第五瓣位置剧透、市花答成“雪”、会答应唱歌、不知道就现编。
+  本次用户已知情并接受，只验证管线跑通；兜底先挡住最严重的几项，等 v3 模型替换。
+- **未验证清单（花语）**：真机花语实测（首次复制 1.1 GB 耗时、llama 加载耗时、
+  内存占用、回答速度与质量）、两台真机好友对讲仍待真机验；联网打听
+  （`HuayuRules.DONT_KNOW` 那条路）仍是占位口径，未接搜索。
+- **v3 模型替换时改哪几处**（只换模型，不动管线代码）：
+  1. 把新 GGUF 发到 GitHub Release（新 tag，如 `model-17b-q4km-v3`）；
+  2. `.github/workflows/android-debug.yml` 的下载 URL 与字节数核对值改成新的；
+  3. `data/BanpaiLlama.kt` 里的 `MODEL_SIZE` / `MODEL_SHA256` 改成新的
+     （文件名若变，`MODEL_ASSET` 一起改）；
+  4. 按同一评测集重跑 20 题评测，通过门槛（马迭尔/红肠探针 + 4 道守栏题全过，
+     20 题 ≥80%）过了才发版；兜底（`BanpaiGuardrails`）照常保留。
 
 ## 未验证清单（不要假装通过）
 
-- **App：v0.1 已在 GitHub Actions 编出（第 8 跑成功，APK 17 MB，纯骨架无素材）；v0.2 素材全内置（571 MB，APK 约 600 MB），CI 改走 Release 附件——首个 v0.2 构建待本次 push 后验证。** 本机无 JDK/Android SDK，未跑 `./gradlew assembleDebug`；`gradlew` 是占位脚本，需在 Android Studio 里生成标准 Wrapper。
+- **App：v0.3 已在 GitHub Actions 多次编绿并发布（最新 Release v0.3-93f4311，APK 约 885 MB）；带模型管线验证版待本次 push 后验证。** 本机无 JDK/Android SDK，未跑 `./gradlew assembleDebug`；`gradlew` 是占位脚本，需在 Android Studio 里生成标准 Wrapper。
 - **固件：本机无 PlatformIO、无实板，未跑 `pio run` / `pio check`，未烧录**。`platformio.ini` 里的 LCD/触摸/IMU/AXP 引脚是公开资料默认值，未在实板验证；CO5300、QMI8658（敲击阈值 1.8g 需实测调）、CST9217、AXP2101 均未联调。
 - **后端未验证**：短信/微信为 demo 模拟（固定码）；小模型未接（无服务地址）；月卡支付、PostgreSQL 切换、Alembic 迁移未验证；`app/main.py` 仍用已废弃的 `@app.on_event("startup")`（能用，有 DeprecationWarning）。Agora TokenBuilder 已接（`agora-token-builder==1.0.0`，24 测试全过），但真机入会仍待验证。
 - **端到端未验证**：敲吧唧两下拍照、高德真地图（需 release 包，debug 包黑图是预期）、好友双人实时对讲（需登录接通 + 两台真机 + 录音权限）、房间 IM 真机、镜头变形/EXIF 方向实拍、OTA 回滚实测。

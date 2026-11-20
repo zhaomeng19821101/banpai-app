@@ -12,9 +12,12 @@
 #   gradle/actions/setup-gradle 装 Gradle 8.7，用 `gradle` 命令编译。
 # - 不需要任何密钥：local.properties 缺省时 AMAP_KEY / AGORA_APP_ID 为空串，
 #   探索页显示占位、派对语音占位。不要把真 key 提交进仓库。
-# - v0.2：素材全内置（图片 + 视频，571MB，见 assets-manifest.json），APK 约 600MB，
+# - v0.3：素材全内置（图片 + 视频，571MB，见 assets-manifest.json），APK 约 885MB，
 #   离线可看。artifact 上传会超免费存储额度（500MB），所以改走 Release 附件。
-#   地图/语音/小模型仍是占位（待接 AMap / Agora SDK 与 Key）。
+#   地图已接真 AMap 3D（本地内置 SDK），好友对讲控件已接 Agora；
+#   小模型已接：端侧 1.7B Q4_K_M（v1，管线验证版），CI 从 Release 下载 GGUF
+#   打进 assets，llama.cpp（JNI）按 pin 的 commit 现 clone，不进 git。
+#   相机 CameraX 与绿幕抠像、BLE 真连、后端联调待下一步。
 
 name: Android Debug APK
 
@@ -52,13 +55,47 @@ jobs:
       # 导致 "Failed to find package 'tools'" 而整步失败（2026-11-20 首跑的教训）。
       # GitHub 的 ubuntu 机器自带 Android SDK（ANDROID_HOME 已配好），直接用它。
       # 注意：sdkmanager 不在默认 PATH 里，要用 cmdline-tools 下的完整路径。
-      - name: Install Android SDK 34
+      - name: Install Android SDK 34 + NDK + CMake
         run: |
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           [ -x "$SDKMANAGER" ] || SDKMANAGER="$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager"
           "$SDKMANAGER" --version
           yes | "$SDKMANAGER" --licenses
-          "$SDKMANAGER" "platforms;android-34" "build-tools;34.0.0"
+          "$SDKMANAGER" "platforms;android-34" "build-tools;34.0.0" "ndk;27.2.12479018" "cmake;3.22.1"
+
+      # llama.cpp 不进 git：按 pin 的 commit 现 clone（与评测用的同一份源码，
+      # 2026-11-20）。先按 SHA 浅抓，失败再整库 clone 后 checkout。
+      - name: Clone llama.cpp (pinned commit)
+        run: |
+          set -e
+          LLAMA_COMMIT="4c4a0f0a4246bc36a3724d12238d5624714dcb2f"
+          rm -rf app/src/main/cpp/llama.cpp
+          mkdir -p app/src/main/cpp/llama.cpp
+          cd app/src/main/cpp/llama.cpp
+          git init -q
+          git remote add origin https://github.com/ggml-org/llama.cpp.git
+          if ! git fetch -q --depth 1 origin "$LLAMA_COMMIT"; then
+            echo "fetch-by-sha failed, falling back to full clone"
+            cd ..
+            rm -rf llama.cpp
+            git clone -q https://github.com/ggml-org/llama.cpp.git llama.cpp
+            cd llama.cpp
+          fi
+          git checkout -q "$LLAMA_COMMIT"
+          test -f include/llama.h && echo "llama.cpp pinned at $LLAMA_COMMIT"
+
+      # 端侧模型不进 git（1.1 GB，超 GitHub 100 MB 单文件上限）：构建前从
+      # Release（tag model-17b-q4km-v1）下载到 assets，下载完核对字节数，
+      # 对不上就报错停下。v3 模型替换时只换这里的 tag + 文件名。
+      - name: Download 1.7B model (GGUF)
+        run: |
+          set -e
+          mkdir -p app/src/main/assets
+          curl -L --retry 3 --fail -o app/src/main/assets/banpai-17b-q4_k_m.gguf \
+            https://github.com/zhaomeng19821101/banpai-app/releases/download/model-17b-q4km-v1/banpai-17b-q4_k_m.gguf
+          SIZE=$(stat -c%s app/src/main/assets/banpai-17b-q4_k_m.gguf)
+          echo "model bytes: $SIZE (expect 1107408832)"
+          [ "$SIZE" = "1107408832" ] || { echo "MODEL SIZE MISMATCH, aborting"; exit 1; }
 
       - name: Set up Gradle 8.7
         uses: gradle/actions/setup-gradle@v4
@@ -68,9 +105,31 @@ jobs:
       - name: Build debug APK
         run: gradle assembleDebug --no-daemon --stacktrace
 
-      # APK 约 600MB（素材全内置），actions/upload-artifact 会超免费存储额度（500MB），
+      # GitHub Release 单文件上限 2,147,483,648 字节。当前 APK 约 885MB，
+      # 加 1.1GB 模型约 2.0GB，非常接近：超了就直接失败，绝不硬传。
+      - name: Check APK size (GitHub Release 2 GiB cap)
+        run: |
+          APK="app/build/outputs/apk/debug/app-debug.apk"
+          ls -lh "$APK"
+          SIZE=$(stat -c%s "$APK")
+          echo "apk bytes: $SIZE (cap 2147483648)"
+          [ "$SIZE" -le 2147483648 ] || { echo "APK OVER 2 GiB CAP, refusing to publish"; exit 1; }
+
+      # 固定 debug keystore：新包签名 SHA1 必须等于仓库里 app/debug.keystore 的
+      # SHA1，否则高德控制台登记的 debug SHA1 对不上，地图又会黑。
+      - name: Verify APK signature SHA1 (fixed debug keystore)
+        run: |
+          APK="app/build/outputs/apk/debug/app-debug.apk"
+          APKSIGNER="$ANDROID_HOME/build-tools/34.0.0/apksigner"
+          EXPECTED="92:94:48:3F:DA:14:78:B6:A3:6B:C5:A3:03:01:C4:05:87:B4:C7:68"
+          ACTUAL=$("$APKSIGNER" verify --print-certs "$APK" | grep -i "SHA-1 digest" | head -1 | awk '{print $NF}')
+          echo "apk SHA1: $ACTUAL (expect $EXPECTED)"
+          [ "$ACTUAL" = "$EXPECTED" ] || { echo "APK SIGNATURE SHA1 MISMATCH, aborting"; exit 1; }
+
+      # APK 约 2.0GB（素材 885MB + 模型 1.1GB），actions/upload-artifact 会超免费存储额度（500MB），
       # 所以改走 GitHub Release 附件（单文件 2GB 上限）。每次推 main 就发一个新 Release，
-      # tag = v0.2-<短 commit>；重复跑同一 commit 时改为覆盖上传。
+      # tag = v0.3-<短 commit>；重复跑同一 commit 时改为覆盖上传。
+      # 发之前已有一步核对 APK 不超 2 GiB 上限，超了直接失败不发。
       - name: Publish APK to GitHub Release
         run: |
           APK="app/build/outputs/apk/debug/app-debug.apk"
@@ -81,7 +140,7 @@ jobs:
           else
             gh release create "$TAG" "$APK" \
               --title "半拍 Banpai v0.3 工程版（$TAG）" \
-              --notes "工程版 v0.3：v0.2 拆包核对后修了 5 项（认识半拍横向滑动、打卡距离环、图鉴金瓣闪烁、表盘 8 种时间模板、1:1 好友聊天页）。素材全内置（图片+视频，离线可看），16 屏可点。AMap/Agora Key 未配，地图/语音/小模型为占位；相机 CameraX 与绿幕抠像、BLE 真连、后端联调待下一步。"
+              --notes "管线验证版：端侧 1.7B（Q4_K_M，v1）已内置，花语聊天走 llama.cpp 端侧推理 + 五项 App 侧兜底（第五瓣拦截 / think-strip / 15 条锁定台词 lookup / 唱歌拒绝 / 马迭尔·红肠事实 lookup）。模型毛病已知待 v3 替换：马迭尔/红肠归属、第五瓣剧透、市花答错、答应唱歌、不知道就现编——本次只验证管线跑通。AMap 真地图 + 好友对讲控件已接。真机花语实测、加载耗时、内存占用待真机验。相机 CameraX 与绿幕抠像、BLE 真连、后端联调待下一步。"
           fi
           echo "release_tag=$TAG" >> "$GITHUB_OUTPUT"
         env:

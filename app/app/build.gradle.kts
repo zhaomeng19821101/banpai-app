@@ -36,9 +36,44 @@ android {
         // 高德 Key 注入 AndroidManifest 的 com.amap.api.v2.apikey；
         // CI 上无 local.properties 时为空串，探索页只显示占位说明，不创建 MapView。
         manifestPlaceholders["AMAP_KEY"] = localProps.getProperty("AMAP_KEY", "")
+
+        // 端侧推理：llama.cpp（JNI，见 src/main/cpp/）。NDK 由 CI 装
+        // ndk;27.2.12479018；ABI 与高德 jniLibs 保持一致（arm64 + v7a），
+        // 不多编 x86/x86_64，省构建时间与包体积。
+        ndkVersion = "27.2.12479018"
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+        }
+    }
+
+    // llama.cpp 桥接：src/main/cpp/CMakeLists.txt（llama.cpp 源码由 CI 按 pin 的
+    // commit 现 clone 到 src/main/cpp/llama.cpp，不进 git）。
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
+    }
+
+    signingConfigs {
+        // 固定 debug keystore（2026-11-20）：CI 每次构建用临时生成的 keystore，
+        // 签名 SHA1 每次都变，高德控制台登记的 debug SHA1 只对某一个包有效。
+        // 改用仓库里这份固定 debug.keystore（标准 android/android 口令，
+        // 不是机密，可以进仓库），以后每次构建 SHA1 都一样。
+        // SHA1：92:94:48:3F:DA:14:78:B6:A3:6B:C5:A3:03:01:C4:05:87:B4:C7:68
+        // 高德控制台登记这一个 debug SHA1 即可。
+        getByName("debug") {
+            storeFile = file("../debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -64,8 +99,10 @@ android {
 
     // 素材全部内置：视频不压缩进包（ExoPlayer 可直接读 assets，加载快）；
     // 图片 webp/png 本身已压缩，noCompress 只影响存储方式，不影响体积。
+    // gguf 模型也不压缩：1.1 GB 模型压缩后几乎不省体积，还会拖慢打包与解压，
+    // 且 AssetManager 读未压缩 asset 才能直接拷到 filesDir 给 llama 用。
     aaptOptions {
-        noCompress("mp4")
+        noCompress("mp4", "gguf")
     }
 }
 
