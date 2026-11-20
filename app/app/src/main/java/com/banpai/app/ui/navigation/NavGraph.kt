@@ -19,6 +19,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -35,6 +38,7 @@ import com.banpai.app.ui.screens.CheckInScreen
 import com.banpai.app.ui.screens.DiaryScreen
 import com.banpai.app.ui.screens.DressUpScreen
 import com.banpai.app.ui.screens.ExploreScreen
+import com.banpai.app.ui.screens.FriendChatScreen
 import com.banpai.app.ui.screens.GardenScreen
 import com.banpai.app.ui.screens.HomeScreen
 import com.banpai.app.ui.screens.IntroScreen
@@ -62,6 +66,7 @@ object Routes {
     const val WATCHFACE = "watchface"
     const val CHAT = "chat"
     const val PARTY = "party"
+    const val FRIEND_CHAT = "friend_chat" // 1:1 好友聊天（好友名经 chattingWith 传）
     const val GARDEN = "garden"
     const val DIARY = "diary"
     const val POSTCARD = "postcard"
@@ -84,6 +89,7 @@ fun BanpaiNavGraph(
     val backStack by navController.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination?.route
     val showBottomBar = currentRoute in MAIN_TABS.map { it.first }
+    var chattingWith by remember { mutableStateOf("好友") }
 
     Scaffold(
         bottomBar = {
@@ -208,7 +214,18 @@ fun BanpaiNavGraph(
             composable(Routes.CAMERA) { CameraScreen() }
             composable(Routes.WATCHFACE) { WatchfaceScreen() }
             composable(Routes.CHAT) { ChatScreen() }
-            composable(Routes.PARTY) { PartyScreen() }
+            composable(Routes.PARTY) {
+                PartyScreen(onOpenFriendChat = { name ->
+                    chattingWith = name
+                    navController.navigate(Routes.FRIEND_CHAT)
+                })
+            }
+            composable(Routes.FRIEND_CHAT) {
+                FriendChatScreen(
+                    friendName = chattingWith,
+                    onBack = { navController.popBackStack() }
+                )
+            }
             composable(Routes.GARDEN) { GardenScreen() }
             composable(Routes.DIARY) { DiaryScreen() }
             composable(Routes.POSTCARD) { PostcardScreen() }

@@ -27,14 +27,13 @@ import com.banpai.app.ui.media.AssetImage
  * 语音：Agora 接入点占位（AGORA_APP_ID 在 local.properties）；
  * 按住说话 + 打字键盘切换 + 表情包（半拍 9 格表情真图）。
  * 吧唧上可直接进房 / 接受好友邀请（BLE 占位，见 BleManager）。
- * 1:1 好友聊天页下一步接（异步语音 + 文字）；现在点好友只提示。
+ * 点好友名进 1:1 聊天页（FriendChatScreen：异步语音 + 文字 + 表情）。
  */
 @Composable
-fun PartyScreen() {
+fun PartyScreen(onOpenFriendChat: (String) -> Unit = {}) {
     var holdToTalk by remember { mutableStateOf(false) }
     var useKeyboard by remember { mutableStateOf(true) }
     var tab by remember { mutableStateOf("房间") }
-    var hint by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         ScreenHeader("派对", "房间列表 · 好友一对一 · Agora 语音占位")
@@ -49,13 +48,11 @@ fun PartyScreen() {
             }
         } else {
             FRIENDS.forEach { friend ->
-                InfoCard(friend.name)
+                OutlinedButton(
+                    onClick = { onOpenFriendChat(friend.name) },
+                    modifier = Modifier.fillMaxWidth()
+                ) { Text("和 ${friend.name} 聊天") }
             }
-            OutlinedButton(
-                onClick = { hint = "1:1 好友聊天页下一步接（异步语音 + 文字）" },
-                modifier = Modifier.fillMaxWidth()
-            ) { Text("打开好友聊天") }
-            if (hint.isNotEmpty()) Text(hint)
         }
         Spacer(modifier = Modifier.height(16.dp))
         Row(modifier = Modifier.fillMaxWidth()) {

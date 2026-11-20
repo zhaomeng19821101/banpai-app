@@ -1,5 +1,6 @@
 package com.banpai.app.ui.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,9 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -20,7 +20,7 @@ import com.banpai.app.data.introCardAsset
 import com.banpai.app.ui.media.AssetImage
 
 /**
- * 认识半拍：4 卡 swipeable intro（可跳过，首次之后不再出现，我的·关于半拍可重看）。
+ * 认识半拍：4 卡横向滑动 intro（可跳过，首次之后不再出现，我的·关于半拍可重看）。
  * 四瓣定版：冰、雪、乐、花；静留给第五瓣（它未来会静静地看那封信）。
  * 半拍是哈尔滨一年四季孕育出来的精灵（不只是雪夜）。
  */
@@ -33,29 +33,34 @@ private val INTRO_CARDS = listOf(
     IntroCard("跟我一起走吧", "慢慢走，慢慢听，哈尔滨会把歌唱给你。", "跟我一起走吧。")
 )
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun IntroScreen(onDone: () -> Unit) {
+    val pagerState = rememberPagerState(pageCount = { INTRO_CARDS.size })
+
     Column(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
             Spacer(modifier = Modifier.weight(1f))
             TextButton(onClick = onDone) { Text("跳过") }
         }
-        ScreenHeader("认识半拍", "4 张卡片，滑一滑认识我（可跳过）")
-        LazyColumn(modifier = Modifier.weight(1f)) {
-            items(INTRO_CARDS.withIndex().toList()) { (index, card) ->
-                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) {
-                    AssetImage(
-                        assetPath = introCardAsset(index + 1),
-                        contentDescription = card.title,
-                        modifier = Modifier.fillMaxWidth().height(200.dp),
-                        contentScale = ContentScale.Crop
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    InfoCard("${card.title}\n${card.body}\n「${card.line}」")
-                }
+        ScreenHeader("认识半拍", "4 张卡片，左右滑一滑认识我（可跳过）")
+        HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
+            val card = INTRO_CARDS[page]
+            Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                AssetImage(
+                    assetPath = introCardAsset(page + 1),
+                    contentDescription = card.title,
+                    modifier = Modifier.fillMaxWidth().height(320.dp),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                InfoCard("${card.title}\n${card.body}\n「${card.line}」")
             }
         }
-        Text("第 1 张起：半拍档案在图鉴第一页", modifier = Modifier.padding(16.dp))
+        Text(
+            "第 ${pagerState.currentPage + 1} / ${INTRO_CARDS.size} 张 · 左右滑动 · 半拍档案在图鉴第一页",
+            modifier = Modifier.padding(16.dp)
+        )
         GoldButton("开始", onClick = onDone)
         Spacer(modifier = Modifier.height(8.dp))
     }

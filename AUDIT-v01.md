@@ -193,6 +193,46 @@
 
 ---
 
+## v0.2 拆包核对记录（2026-11-20 13:07–13:20 CST，Jackson 要求：编完逐项对照）
+
+核对方法：不只看源码——下载 Release 附件 `v0.2-05a629f/app-debug.apk`，SHA256 与 Release 校验值一致（`1fbdb780…02cf4`），确认就是本次构建；再拆包核对。
+
+### 拆包核对结果（全部通过）
+- **APK 大小**：590.8 MB（GitHub API 口径 619,527,691 字节；v0.1 是 17 MB）。
+- **素材在包里**：`unzip -l` 计数 261 个 assets 文件（视频 75 + 图片 186），与 `assets-manifest.json` 完全一致；表盘+守护宠卡+装扮+明信片 95 个。
+- **16 屏都在**：dex 里 16 个 Screen 的 `*ScreenKt` 类全在（Welcome/Intro/Login/Home/Explore/CheckIn/Atlas/Profile/DressUp/Camera/Watchface/Chat/Party/Garden/Diary/Postcard）。
+- **素材接线在包里**：dex 含 Media3 ExoPlayer、`ui/media/MediaKt`、`asset:///`、全部素材路径模板（`watchfaces/%02d.webp`、`guardian-cards/%02d.webp`、`guardian-videos/`、`frames/vertical/`、`camera-styles/style-%02d.jpg`、`greenscreen/di-peek-v7.mp4`、`easter-egg/letter.png`、`postcards/`、`outfits/`、`welcome/welcome.mp4`）；中文文案（芽开·丁香、金瓣隐藏、一起种芽、雪夜传信、第五瓣的信、跟随系统）也在 dex 里（`strings` 默认只显 ASCII，须用 `grep -a` 查 UTF-8）。
+- **Tab 图标**：dex 含 Home/Search/Star/Person 四个不同图标。
+
+### v3 逐项打勾（v0.2 核对时）
+| 要求 | 结果 |
+|---|---|
+| 首页一屏放得下 | △ 代码是无滚动 Column，估算约 650–700dp，412×924 能放下，360×800 偏紧——**待真机验** |
+| 探索地图 | ❌ 占位（无 AMap SDK/Key）——要 key，修不了，见下 |
+| 打卡 | △ 规则对，但距离环是文字 → **v0.3 已修：Canvas 圆环（三态）** |
+| 图鉴 24 守护宠 + 30 食物 | ✅ 图/视频全；11 种食物素材库无图（修不了）；金瓣闪烁缺 → **v0.3 已修：透明度脉冲动画** |
+| 表盘 30 个 | ✅ 图全；8 种时间模板缺（只有 5 种时钟样式）→ **v0.3 已修：8 模板选择器** |
+| 明信片 24 + 海报 4 | ✅ 图全 + 点开放大 |
+| 装扮 3 槽 + 芽开·丁香 | ✅ 3 槽 + 17 套 + 锁定态 |
+| 种芽 7 次开花 | ✅ 流程全（浇水/开花/领取/去装扮） |
+| 派对/好友聊天 | △ 房间/好友切换有了，1:1 聊天页缺 → **v0.3 已修：新建 FriendChatScreen + 路由** |
+| 公共花园发照片 | ✅ 选照片真能选 + 上墙；直接拍照缺（CameraX，修不了） |
+| 日记 19 篇 | ✅ 19 篇全对 |
+| 白天/夜晚/跟随系统三档 | ✅ 已实现 |
+| 四瓣红线 | ✅ 打包时目检标准图 4 瓣、金瓣 5 瓣；其余成套素材以生产记录为准（APK 内无法逐图目检，真机目检待 Jackson） |
+
+### v0.3 修了什么（commit 待 CI）
+1. 认识半拍改横向滑动：`LazyColumn` → `HorizontalPager`（v3 要求 4 页可滑动）+ 页码指示。
+2. 打卡页距离环：Canvas 画圆环（底环 + 暖金进度弧，三态：未到 25% / 可打卡 85% / 已打卡 100%）+ 中央状态与距离文字（距离仍是占位，真机 GPS）。
+3. 图鉴金瓣闪烁：`rememberInfiniteTransition` 透明度 0.35↔1 循环。
+4. 表盘 8 种时间模板：新增 `TIME_TEMPLATES`（大字上下排、横排大字、细体大数字、时间加星期日期、极简小字、底部时间、带秒数、胶囊底衬）选择器；选表盘时模板默认跟它的时钟样式，之后可自由切换。
+5. 1:1 好友聊天页：新建 `FriendChatScreen`（消息列表 + 打字键盘/按住说话切换 + 9 格表情真图 + 返回）；派对页好友 tab 每人一个“和 X 聊天”按钮；`NavGraph` 加 `FRIEND_CHAT` 路由（好友名经 `chattingWith` 传，底部栏在聊天页隐藏）。
+
+### v0.3 之后还缺（修不了，要真机 / 要 key / 要外部）
+- AMap 真地图（SDK + Key，debug SHA1 另注册）；CameraX 真取景 + 拍照/录像 + 绿幕抠像叠加；小模型 API（Colab 训练中）；BLE 真连；Agora 语音；后端联调；微信分享 Open SDK；11 种食物补图；首页一屏真机验证。
+
+---
+
 ## 备注
 - 审计只覆盖 `app/`（Android 端）。后端 80 路由、吧唧固件不在本次审计内。
 - v3 框架里"8 种时间模板 vs 代码 5 种时钟样式"、"8 种大师风格 vs 代码 6 种通用名"这两处口径差，在补齐时以 v3 为准。

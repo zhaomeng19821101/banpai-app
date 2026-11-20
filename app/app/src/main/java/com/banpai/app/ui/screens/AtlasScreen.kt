@@ -1,5 +1,10 @@
 package com.banpai.app.ui.screens
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -40,20 +46,35 @@ import com.banpai.app.ui.media.AssetVideo
  * 点开全屏显示信的原图（可滚动，右上角小 × 与底部「收起这封信」不遮信）。
  * 四瓣：冰、雪、乐、花；静留给第五瓣。
  * 守护宠卡片是真图，点开播真视频（守护宠 10 秒视频，内置离线播）；
- * 好吃团 30 种里 12 种素材库无图（卡片保持纯文字，不硬塞错图），
+ * 好吃团 30 种里 11 种素材库无图（卡片保持纯文字，不硬塞错图），
  * 已解锁 3 种：马迭尔冰棍、秋林红肠、华梅面包（华梅面包有专属新图）。
  */
 @Composable
 fun AtlasScreen() {
     var showLetter by remember { mutableStateOf(false) }
     var playingPet by remember { mutableStateOf<Int?>(null) }
+    // 金色第五瓣常驻闪烁：透明度 0.35 ↔ 1 循环。
+    val infiniteTransition = rememberInfiniteTransition(label = "goldPetal")
+    val goldAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.35f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(900),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "goldPetalAlpha"
+    )
 
     Column(modifier = Modifier.fillMaxSize()) {
         ScreenHeader("图鉴", "守护宠 · 好吃团 · 半拍档案")
         InfoCard("半拍档案：哈尔滨一年四季孕育出来的精灵。\n" +
             "四瓣：冰、雪、乐、花。静，留给第五瓣。\n" +
             "正在找第五瓣。徽章、能量规则见档案页。")
-        InfoCard("✦ 金色第五瓣（常驻闪烁）— 点开出信，不播视频")
+        Box(
+            modifier = Modifier.fillMaxWidth().graphicsLayer { alpha = goldAlpha }
+        ) {
+            InfoCard("✦ 金色第五瓣（常驻闪烁）— 点开出信，不播视频")
+        }
         GoldButton("点开第五瓣的信", onClick = { showLetter = true })
         LazyColumn(modifier = Modifier.weight(1f)) {
             itemsIndexed(GUARDIAN_PETS) { index, pet ->

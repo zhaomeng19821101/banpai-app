@@ -1,18 +1,25 @@
 package com.banpai.app.ui.screens
 
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.banpai.app.data.CheckInRules
@@ -40,6 +47,44 @@ fun CheckInScreen(onOpenCamera: () -> Unit) {
             modifier = Modifier.fillMaxWidth().height(200.dp),
             contentScale = ContentScale.Crop
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        // 距离环（三态）：未到 / 可打卡 / 已打卡。距离是占位（真机 GPS + AMap 步行距离）。
+        val ringProgress = when (state) {
+            "已打卡" -> 1f
+            "可打卡" -> 0.85f
+            else -> 0.25f
+        }
+        val ringDistance = when (state) {
+            "已打卡" -> "已打卡 · 0 米"
+            "可打卡" -> "可打卡 · 约 86 米"
+            else -> "还没到 · 约 320 米"
+        }
+        Box(
+            modifier = Modifier.fillMaxWidth().height(200.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Canvas(modifier = Modifier.size(180.dp)) {
+                drawArc(
+                    color = Color(0xFFE8E0F0),
+                    startAngle = -90f,
+                    sweepAngle = 360f,
+                    useCenter = false,
+                    style = Stroke(width = 14.dp.toPx(), cap = StrokeCap.Round)
+                )
+                drawArc(
+                    color = Color(0xFFE9A83C),
+                    startAngle = -90f,
+                    sweepAngle = 360f * ringProgress,
+                    useCenter = false,
+                    style = Stroke(width = 14.dp.toPx(), cap = StrokeCap.Round)
+                )
+            }
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(state)
+                Text(ringDistance)
+                Text("围栏 80–150m 内自动打卡")
+            }
+        }
         Spacer(modifier = Modifier.height(8.dp))
         Text("当前能量：$energy")
         Text("下一站 · 索菲亚·钟 · 80–150m 围栏内自动打卡（AMap 步行距离，真机 GPS）")
