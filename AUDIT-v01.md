@@ -228,6 +228,8 @@
 4. 表盘 8 种时间模板：新增 `TIME_TEMPLATES`（大字上下排、横排大字、细体大数字、时间加星期日期、极简小字、底部时间、带秒数、胶囊底衬）选择器；选表盘时模板默认跟它的时钟样式，之后可自由切换。
 5. 1:1 好友聊天页：新建 `FriendChatScreen`（消息列表 + 打字键盘/按住说话切换 + 9 格表情真图 + 返回）；派对页好友 tab 每人一个“和 X 聊天”按钮；`NavGraph` 加 `FRIEND_CHAT` 路由（好友名经 `chattingWith` 传，底部栏在聊天页隐藏）。
 
+**v0.3 终验（2026-11-20 13:20 CST）**：v0.3 代码首跑 44679282287 已绿，但工作流 tag 前缀还写着 `v0.2-`，Release 名成了 `v0.2-7c67f1f`；已修工作流前缀为 `v0.3-`（commit f2b1f5d），重跑 44679518676 全绿，Release `v0.3-f2b1f5d`，附件 590 MB，SHA256 `be76ddf1…82fcb` 与本地下载一致。终验 dex：16/16 屏、FriendChatScreenKt、friend_chat 路由、PagerKt$HorizontalPager、rememberInfiniteTransition、8 模板文案（胶囊底衬/大字上下排/带秒数/细体大数字）全在；包内 assets 仍是 261 个（视频 75 + 图片 186）。
+
 ### v0.3 之后还缺（修不了，要真机 / 要 key / 要外部）
 - AMap 真地图（SDK + Key，debug SHA1 另注册）；CameraX 真取景 + 拍照/录像 + 绿幕抠像叠加；小模型 API（Colab 训练中）；BLE 真连；Agora 语音；后端联调；微信分享 Open SDK；11 种食物补图；首页一屏真机验证。
 
