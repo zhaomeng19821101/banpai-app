@@ -75,13 +75,13 @@ jobs:
         run: |
           APK="app/build/outputs/apk/debug/app-debug.apk"
           ls -lh "$APK"
-          TAG="v0.2-${GITHUB_SHA:0:7}"
+          TAG="v0.3-${GITHUB_SHA:0:7}"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$APK" --clobber
           else
             gh release create "$TAG" "$APK" \
-              --title "半拍 Banpai v0.2 工程版（$TAG）" \
-              --notes "工程版 v0.2：素材全内置（图片+视频，离线可看），16 屏可点。AMap/Agora Key 未配，地图/语音/小模型为占位；相机 CameraX 与绿幕抠像、BLE 真连、后端联调待下一步。"
+              --title "半拍 Banpai v0.3 工程版（$TAG）" \
+              --notes "工程版 v0.3：v0.2 拆包核对后修了 5 项（认识半拍横向滑动、打卡距离环、图鉴金瓣闪烁、表盘 8 种时间模板、1:1 好友聊天页）。素材全内置（图片+视频，离线可看），16 屏可点。AMap/Agora Key 未配，地图/语音/小模型为占位；相机 CameraX 与绿幕抠像、BLE 真连、后端联调待下一步。"
           fi
           echo "release_tag=$TAG" >> "$GITHUB_OUTPUT"
         env:
