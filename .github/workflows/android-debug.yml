@@ -15,8 +15,8 @@
 # - v0.3：素材全内置（图片 + 视频，571MB，见 assets-manifest.json），APK 约 885MB，
 #   离线可看。artifact 上传会超免费存储额度（500MB），所以改走 Release 附件。
 #   地图已接真 AMap 3D（本地内置 SDK），好友对讲控件已接 Agora；
-#   小模型已接：端侧 1.7B Q4_K_M（v1，管线验证版），CI 从 Release 下载 GGUF
-#   打进 assets，llama.cpp（JNI）按 pin 的 commit 现 clone，不进 git。
+#   小模型已接：端侧 1.7B Q4_K_M（v1，管线验证版），CI 从 Release 分 4 片下载
+#   GGUF、合并校验后打进 assets，llama.cpp（JNI）按 pin 的 commit 现 clone，不进 git。
 #   相机 CameraX 与绿幕抠像、BLE 真连、后端联调待下一步。
 
 name: Android Debug APK
@@ -85,17 +85,27 @@ jobs:
           test -f include/llama.h && echo "llama.cpp pinned at $LLAMA_COMMIT"
 
       # 端侧模型不进 git（1.1 GB，超 GitHub 100 MB 单文件上限）：构建前从
-      # Release（tag model-17b-q4km-v1）下载到 assets，下载完核对字节数，
-      # 对不上就报错停下。v3 模型替换时只换这里的 tag + 文件名。
-      - name: Download 1.7B model (GGUF)
+      # Release（tag model-17b-q4km-v1）下载 4 个分片（单份 ~277 MB；整文件
+      # 上传在 uploads.github.com 上会在 97–98% 断开，2026-11-20 已试 4 次，
+      # 改走分片），cat 合并后核对字节数 + SHA256，对不上就报错停下。
+      # v3 模型替换时只换这里的 tag + 文件名 + SHA256。
+      - name: Download 1.7B model (GGUF, 4 chunks)
         run: |
           set -e
           mkdir -p app/src/main/assets
-          curl -L --retry 3 --fail -o app/src/main/assets/banpai-17b-q4_k_m.gguf \
-            https://github.com/zhaomeng19821101/banpai-app/releases/download/model-17b-q4km-v1/banpai-17b-q4_k_m.gguf
-          SIZE=$(stat -c%s app/src/main/assets/banpai-17b-q4_k_m.gguf)
+          cd app/src/main/assets
+          for i in 00 01 02 03; do
+            curl -L --retry 3 --fail -o "banpai-17b-q4_k_m.gguf.part$i" \
+              "https://github.com/zhaomeng19821101/banpai-app/releases/download/model-17b-q4km-v1/banpai-17b-q4_k_m.gguf.part$i"
+          done
+          cat banpai-17b-q4_k_m.gguf.part00 banpai-17b-q4_k_m.gguf.part01 banpai-17b-q4_k_m.gguf.part02 banpai-17b-q4_k_m.gguf.part03 > banpai-17b-q4_k_m.gguf
+          rm banpai-17b-q4_k_m.gguf.part00 banpai-17b-q4_k_m.gguf.part01 banpai-17b-q4_k_m.gguf.part02 banpai-17b-q4_k_m.gguf.part03
+          SIZE=$(stat -c%s banpai-17b-q4_k_m.gguf)
           echo "model bytes: $SIZE (expect 1107408832)"
           [ "$SIZE" = "1107408832" ] || { echo "MODEL SIZE MISMATCH, aborting"; exit 1; }
+          SHA=$(sha256sum banpai-17b-q4_k_m.gguf | awk '{print $1}')
+          echo "model SHA256: $SHA (expect 8d349e17925581e68a6198dafc8c08f7b4e63c1e238efea4e9c93e405422df01)"
+          [ "$SHA" = "8d349e17925581e68a6198dafc8c08f7b4e63c1e238efea4e9c93e405422df01" ] || { echo "MODEL SHA256 MISMATCH, aborting"; exit 1; }
 
       - name: Set up Gradle 8.7
         uses: gradle/actions/setup-gradle@v4
