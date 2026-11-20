@@ -1,0 +1,55 @@
+# 半拍 Banpai — 吧唧 Badge Firmware 自动编译（PlatformIO）
+#
+# 固件源码在 badge-firmware/（PlatformIO + ESP32-S3，Arduino core），
+# 和 App 在同一个仓库。改固件或改这个文件就触发，只编固件，不动 APK。
+# 两个 env 都编：waveshare-1.75（真吧唧，466 圆屏，默认）和
+# esp32-s3-devkitc-1（开发板对照）。编出的 firmware.bin 作为
+# artifact 保存 7 天（Actions → 这个 run → Artifacts 下载）。
+#
+# 注意：GitHub 只能编译、检查固件能不能编过。烧录到吧唧板子上
+# 还得在真机边做（USB 线 + pio run -t upload，或 OTA），
+# GitHub 摸不到桌上的板子。引脚、电量读数、敲击阈值也一样，
+# 都要在真板子上验证（见 badge-firmware/README_FIRMWARE.md）。
+
+name: Badge Firmware
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'badge-firmware/**'
+      - '.github/workflows/firmware.yml'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'badge-firmware/**'
+  workflow_dispatch:
+
+jobs:
+  build-firmware:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PlatformIO
+        run: pip install -U platformio
+
+      - name: Build firmware (waveshare-1.75 + devkitc-1)
+        working-directory: badge-firmware
+        run: pio run -e waveshare-1.75 -e esp32-s3-devkitc-1
+
+      - name: Upload firmware binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: banpai-badge-firmware
+          path: |
+            badge-firmware/.pio/build/waveshare-1.75/firmware.bin
+            badge-firmware/.pio/build/esp32-s3-devkitc-1/firmware.bin
+          if-no-files-found: error
+          retention-days: 7
