@@ -30,7 +30,7 @@
 
 ```
 badge-firmware/
-├── platformio.ini          # env esp32-s3-devkitc-1 + waveshare-1.75（后者默认）
+├── platformio.ini          # env esp32-s3-devkitc-1 + waveshare_175（后者默认）
 ├── partitions.csv          # 16 MB：nvs / otadata / app0 6 MB / app1 6 MB / littlefs
 ├── README_FIRMWARE.md      # 本文件
 └── src/
@@ -116,7 +116,7 @@ badge-firmware/
 pip install platformio        # 或：VS Code + PlatformIO IDE 插件
 pio --version
 
-# 2. 编译（默认 env 就是 waveshare-1.75）
+# 2. 编译（默认 env 就是 waveshare_175）
 cd ~/workspace/banpai-code/badge-firmware
 pio run -e waveshare-1.75      # 实板目标
 pio run -e esp32-s3-devkitc-1  # 开发板对照（同芯片，无圆屏）
@@ -193,7 +193,7 @@ pio device monitor -e waveshare-1.75   # 115200
 
 - C++ 括号 / 头文件配对：`src/*.h` 与 `src/*.cpp` 人工逐文件核对通过
   （`python` 括号平衡扫描 + `#include` 配对检查，见下）。
-- `platformio.ini` 字段核对：两个 env、默认 env `waveshare-1.75`、
+- `platformio.ini` 字段核对：两个 env、默认 env `waveshare_175`、
   分区表引用、16 MB flash、NimBLE-Arduino 依赖均已核对。
 - 自查中发现并修复：游戏计时起点未设置会导致一开局就超时；
   时间层曾是 `"12:00"` 假值，已改为按 TIME 帧 + 时区算真实 HH:MM；

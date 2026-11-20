@@ -2,7 +2,7 @@
 #
 # 固件源码在 badge-firmware/（PlatformIO + ESP32-S3，Arduino core），
 # 和 App 在同一个仓库。改固件或改这个文件就触发，只编固件，不动 APK。
-# 两个 env 都编：waveshare-1.75（真吧唧，466 圆屏，默认）和
+# 两个 env 都编：waveshare_175（真吧唧，466 圆屏，默认）和
 # esp32-s3-devkitc-1（开发板对照）。编出的 firmware.bin 作为
 # artifact 保存 7 天（Actions → 这个 run → Artifacts 下载）。
 #
@@ -40,16 +40,16 @@ jobs:
       - name: Install PlatformIO
         run: pip install -U platformio
 
-      - name: Build firmware (waveshare-1.75 + devkitc-1)
+      - name: Build firmware (waveshare_175 + devkitc-1)
         working-directory: badge-firmware
-        run: pio run -e waveshare-1.75 -e esp32-s3-devkitc-1
+        run: pio run -e waveshare_175 -e esp32-s3-devkitc-1
 
       - name: Upload firmware binaries
         uses: actions/upload-artifact@v4
         with:
           name: banpai-badge-firmware
           path: |
-            badge-firmware/.pio/build/waveshare-1.75/firmware.bin
+            badge-firmware/.pio/build/waveshare_175/firmware.bin
             badge-firmware/.pio/build/esp32-s3-devkitc-1/firmware.bin
           if-no-files-found: error
           retention-days: 7
