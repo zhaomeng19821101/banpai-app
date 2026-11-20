@@ -30,4 +30,6 @@ add_subdirectory(llama.cpp)
 add_library(banpai_llama SHARED banpai_llama_jni.cpp)
 
 # llama 目标自带 PUBLIC 头文件路径与 ggml 依赖，link 它就够了。
-target_link_libraries(banpai_llama PRIVATE llama)
+# log：banpai_llama_jni.cpp 用 __android_log_print（<android/log.h>），
+# 2026-11-20 CI 首次构建缺它报 undefined symbol，link 失败。
+target_link_libraries(banpai_llama PRIVATE llama log)
