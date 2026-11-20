@@ -44,11 +44,13 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
+      # 不用 android-actions/setup-android：它默认会装已被谷歌下架的旧 "tools" 包，
+      # 导致 "Failed to find package 'tools'" 而整步失败（2026-11-20 首跑的教训）。
+      # GitHub 的 ubuntu 机器自带 Android SDK（ANDROID_HOME 已配好），直接用它。
       - name: Install Android SDK 34
         run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          sdkmanager --version
           yes | sdkmanager --licenses
           sdkmanager "platforms;android-34" "build-tools;34.0.0"
 
