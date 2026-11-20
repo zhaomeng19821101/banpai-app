@@ -151,7 +151,9 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
 - **这次验证了什么**：llama.cpp（JNI，`app/app/src/main/cpp/`，pin 在提交
   `4c4a0f0a4246bc36a3724d12238d5624714dcb2f`，与评测同一份源码）能编进 APK；
   1.7B Q4_K_M（v1，1,107,408,832 字节，SHA256 `8d349e17…22df01`）由 CI 从
-  GitHub Release（tag `model-17b-q4km-v1`）下载、打进 assets、随 APK 发布；
+  GitHub Release（tag `model-17b-q4km-v1`，分 4 片下载、合并后 SHA256 校验）
+  下载、打进 assets、随 APK 发布；CI 已绿并发布 v0.3-c75a120
+  （APK 1,863,920,972 字节 ≈ 1.74 GiB，未超 2 GiB 上限）；
   花语聊天屏（`ChatScreen.kt`）走“兜底 → 模型”顺序回答，模型没就绪不假装回答。
 - **瘦身（2026-11-20）**：为压体积暂去 armeabi-v7a，只支持 arm64-v8a（目标机
   OnePlus Ace 2 是 arm64）；正式版如需覆盖老机型可恢复 `abiFilters`。
@@ -173,8 +175,9 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
   内存占用、回答速度与质量）、两台真机好友对讲仍待真机验；联网打听
   （`HuayuRules.DONT_KNOW` 那条路）仍是占位口径，未接搜索。
 - **v3 模型替换时改哪几处**（只换模型，不动管线代码）：
-  1. 把新 GGUF 发到 GitHub Release（新 tag，如 `model-17b-q4km-v3`）；
-  2. `.github/workflows/android-debug.yml` 的下载 URL 与字节数核对值改成新的；
+  1. 把新 GGUF 发到 GitHub Release（新 tag，如 `model-17b-q4km-v3`，整文件
+     传不上就分片上传，分片名保持 `banpai-17b-q4_k_m.gguf.part00–03` 格式）；
+  2. `.github/workflows/android-debug.yml` 的下载 URL 与字节数、SHA256 核对值改成新的；
   3. `data/BanpaiLlama.kt` 里的 `MODEL_SIZE` / `MODEL_SHA256` 改成新的
      （文件名若变，`MODEL_ASSET` 一起改）；
   4. 按同一评测集重跑 20 题评测，通过门槛（马迭尔/红肠探针 + 4 道守栏题全过，
@@ -182,7 +185,7 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
 
 ## 未验证清单（不要假装通过）
 
-- **App：v0.3 已在 GitHub Actions 多次编绿并发布（最新 Release v0.3-93f4311，APK 约 885 MB）；带模型管线验证版待本次 push 后验证。** 本机无 JDK/Android SDK，未跑 `./gradlew assembleDebug`；`gradlew` 是占位脚本，需在 Android Studio 里生成标准 Wrapper。
+- **App：v0.3 已在 GitHub Actions 多次编绿并发布；带模型管线验证版已绿并发布（Release v0.3-c75a120，APK 1,863,920,972 字节 ≈ 1.74 GiB，含 1.7B Q4_K_M v1；CI run 44728173779）。** 本机无 JDK/Android SDK，未跑 `./gradlew assembleDebug`；`gradlew` 是占位脚本，需在 Android Studio 里生成标准 Wrapper。
 - **固件：本机无 PlatformIO、无实板，未跑 `pio run` / `pio check`，未烧录**。`platformio.ini` 里的 LCD/触摸/IMU/AXP 引脚是公开资料默认值，未在实板验证；CO5300、QMI8658（敲击阈值 1.8g 需实测调）、CST9217、AXP2101 均未联调。
 - **后端未验证**：短信/微信为 demo 模拟（固定码）；小模型未接（无服务地址）；月卡支付、PostgreSQL 切换、Alembic 迁移未验证；`app/main.py` 仍用已废弃的 `@app.on_event("startup")`（能用，有 DeprecationWarning）。Agora TokenBuilder 已接（`agora-token-builder==1.0.0`，24 测试全过），但真机入会仍待验证。
 - **端到端未验证**：敲吧唧两下拍照、高德真地图（需 release 包，debug 包黑图是预期）、好友双人实时对讲（需登录接通 + 两台真机 + 录音权限）、房间 IM 真机、镜头变形/EXIF 方向实拍、OTA 回滚实测。
