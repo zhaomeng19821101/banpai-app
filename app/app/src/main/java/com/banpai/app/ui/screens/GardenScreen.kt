@@ -54,7 +54,7 @@ fun GardenScreen() {
     }
 
     // 本机选的照片解码显示（IO 线程解码）。
-    val pickedBitmap by produceState(initialValue = null, pickedUri) {
+    val pickedBitmap by produceState<androidx.compose.ui.graphics.ImageBitmap?>(initialValue = null, pickedUri) {
         value = pickedUri?.let { uri ->
             withContext(Dispatchers.IO) {
                 try {
