@@ -38,11 +38,13 @@ android {
         manifestPlaceholders["AMAP_KEY"] = localProps.getProperty("AMAP_KEY", "")
 
         // 端侧推理：llama.cpp（JNI，见 src/main/cpp/）。NDK 由 CI 装
-        // ndk;27.2.12479018；ABI 与高德 jniLibs 保持一致（arm64 + v7a），
-        // 不多编 x86/x86_64，省构建时间与包体积。
+        // ndk;27.2.12479018；瘦身（2026-11-20）：管线验证版只留 arm64-v8a，
+        // 去掉 armeabi-v7a（jniLibs 里的 v7a .so 会被自动忽略，不用删文件），
+        // 约省 30–40 MB；目标机 OnePlus Ace 2 是 arm64。正式版如需覆盖
+        // 老机型，把 abiFilters 恢复成 arm64-v8a + armeabi-v7a 即可。
         ndkVersion = "27.2.12479018"
         ndk {
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+            abiFilters += listOf("arm64-v8a")
         }
     }
 
