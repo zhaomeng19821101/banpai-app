@@ -36,6 +36,8 @@
 #define BANPAI_MODEL       "waveshare-1.75"
 #define BANPAI_FW_VERSION_STR "0.1.0-scaffold"
 
+namespace bleproto {
+
 // ---------------------------------------------------------------- Types
 enum class TapKind : uint8_t { TAP = 0, KNOCK = 1, SHUTTER = 2 };
 enum class TapMode : uint8_t { NORMAL = 0, CAMERA = 1 };
@@ -76,8 +78,6 @@ struct OtaControl {
   uint32_t crc32 = 0;
   String errCode;
 };
-
-namespace bleproto {
 
 // --- parsing (App -> badge) -------------------------------------------
 // Each returns false on malformed input; never throws.
