@@ -1,0 +1,1367 @@
+{
+ "copied": [
+  {
+   "dst": "banpai/standard-front.webp",
+   "src": "/home/hatch/workspace/banpai/assets/banpai/media-generation-banpai-standard-front-0-368cdb17-cd73-44fd-a8e7-6a4a82ac10d1.webp",
+   "bytes": 683234
+  },
+  {
+   "dst": "banpai/expressions.webp",
+   "src": "/home/hatch/workspace/banpai/assets/banpai/media-generation-banpai-expressions-0-ab41a355-5a9b-45cc-b008-8cab454c8232.webp",
+   "bytes": 681488
+  },
+  {
+   "dst": "banpai/actions.webp",
+   "src": "/home/hatch/workspace/banpai/assets/banpai/media-generation-banpai-actions-0-ea05fe3a-6fc4-4167-b700-23c2c96ca5c9.webp",
+   "bytes": 466380
+  },
+  {
+   "dst": "banpai/gold-hidden.webp",
+   "src": "/home/hatch/workspace/banpai/assets/banpai/media-generation-banpai-gold-hidden-v3-0-5f877648-a6ff-407f-9c5f-ae7391823605.webp",
+   "bytes": 721634
+  },
+  {
+   "dst": "banpai/mini-q.webp",
+   "src": "/home/hatch/workspace/banpai/assets/banpai/media-generation-banpai-mini-q-v2-0-0e2171b1-6b1f-4bcc-9b81-3e10d6657366.webp",
+   "bytes": 674108
+  },
+  {
+   "dst": "banpai/back-side.webp",
+   "src": "/home/hatch/workspace/banpai/assets/banpai/media-generation-banpai-back-side-0-3bc66b02-c155-493b-9b38-dda7c4be0e0d.webp",
+   "bytes": 605212
+  },
+  {
+   "dst": "intro/01.webp",
+   "src": "/home/hatch/workspace/banpai/assets/intro-cards/media-generation-banpai-intro-1-hello-0-37213a4c-4c7b-4976-bd51-224265643b4f.webp",
+   "bytes": 643426
+  },
+  {
+   "dst": "intro/02.webp",
+   "src": "/home/hatch/workspace/banpai/assets/intro-cards/media-generation-banpai-intro-2-petals-0-64a2dca0-3e48-4fa2-a8af-b38945f4b26a.webp",
+   "bytes": 563576
+  },
+  {
+   "dst": "intro/03.webp",
+   "src": "/home/hatch/workspace/banpai/assets/intro-cards/media-generation-banpai-intro-3-searching-0-ba0f8bce-dcad-4709-9802-19d475240693.webp",
+   "bytes": 448898
+  },
+  {
+   "dst": "intro/04.webp",
+   "src": "/home/hatch/workspace/banpai/assets/intro-cards/media-generation-banpai-intro-4-invite-0-3b9cc53a-24d0-455c-9803-68df74f6b77f.webp",
+   "bytes": 563674
+  },
+  {
+   "dst": "welcome/welcome.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/welcome/media-generation-banpai-welcome-snowy-harbin-0-5d7e2a3e-b764-46f9-aef0-309a16cec1e6.mp4",
+   "bytes": 9919116
+  },
+  {
+   "dst": "easter-egg/letter.png",
+   "src": "/home/hatch/workspace/banpai/assets/easter-egg/半拍写给你的信.png",
+   "bytes": 2283005
+  },
+  {
+   "dst": "easter-egg/emblem-gold.webp",
+   "src": "/home/hatch/workspace/banpai/assets/easter-egg/media-generation-banpai-fifth-petal-gold-0-df9cbecd-e15d-4fd4-a336-788f47a8ac41.webp",
+   "bytes": 147484
+  },
+  {
+   "dst": "easter-egg/fifth-petal-video.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/easter-egg/media-generation-banpai-easter-egg-fifth-petal-0-07656a45-08d1-4749-9713-b91dce5ebf4a.mp4",
+   "bytes": 7165967
+  },
+  {
+   "dst": "watchfaces/01.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/01-冰蓝日常-挥手大笑.webp",
+   "bytes": 450632
+  },
+  {
+   "dst": "watchfaces/02.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/02-雪夜-仰头看雪.webp",
+   "bytes": 470016
+  },
+  {
+   "dst": "watchfaces/03.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/03-春日丁香-闭眼闻花.webp",
+   "bytes": 385608
+  },
+  {
+   "dst": "watchfaces/04.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/04-极光之夜-转圈跳舞.webp",
+   "bytes": 454536
+  },
+  {
+   "dst": "watchfaces/05.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/05-金色晨光-捧晨光.webp",
+   "bytes": 483582
+  },
+  {
+   "dst": "watchfaces/06.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/06-雪夜红梅-接雪花.webp",
+   "bytes": 461320
+  },
+  {
+   "dst": "watchfaces/07.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/07-夏花-半蹲看荷花.webp",
+   "bytes": 460640
+  },
+  {
+   "dst": "watchfaces/08.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/08-雪乡红棉袄-抱雪球.webp",
+   "bytes": 503022
+  },
+  {
+   "dst": "watchfaces/09.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/09-冰晶礼服-提裙行礼.webp",
+   "bytes": 519498
+  },
+  {
+   "dst": "watchfaces/10.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/10-音乐会礼服-抬手指挥.webp",
+   "bytes": 422074
+  },
+  {
+   "dst": "watchfaces/11.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/11-滑雪运动装-张臂滑雪.webp",
+   "bytes": 457432
+  },
+  {
+   "dst": "watchfaces/12.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/12-冰灯夜游装-捧冰灯.webp",
+   "bytes": 486456
+  },
+  {
+   "dst": "watchfaces/13.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/13-俄式毛皮冬装-哈气取暖.webp",
+   "bytes": 413064
+  },
+  {
+   "dst": "watchfaces/14.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/14-巴洛克舞会礼服-侧身回眸.webp",
+   "bytes": 413296
+  },
+  {
+   "dst": "watchfaces/15.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/15-夏日江畔装-坐石头踩水.webp",
+   "bytes": 508466
+  },
+  {
+   "dst": "watchfaces/16.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/16-秋日枫叶装-接枫叶.webp",
+   "bytes": 489854
+  },
+  {
+   "dst": "watchfaces/17.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/17-中央大街-跳起来.webp",
+   "bytes": 458734
+  },
+  {
+   "dst": "watchfaces/18.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/18-索菲亚-双手合十许愿.webp",
+   "bytes": 417830
+  },
+  {
+   "dst": "watchfaces/19.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/19-松花江-抱膝坐冰面.webp",
+   "bytes": 487524
+  },
+  {
+   "dst": "watchfaces/20.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/20-太阳岛-指雪雕.webp",
+   "bytes": 515446
+  },
+  {
+   "dst": "watchfaces/21.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/21-冰雪大世界-仰头惊叹.webp",
+   "bytes": 395420
+  },
+  {
+   "dst": "watchfaces/22.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/22-伏尔加庄园-捧雪吹气.webp",
+   "bytes": 512620
+  },
+  {
+   "dst": "watchfaces/23.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/23-雪夜暖绒-雪天使.webp",
+   "bytes": 489716
+  },
+  {
+   "dst": "watchfaces/24.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/24-金瓣隐藏-捧金光.webp",
+   "bytes": 432874
+  },
+  {
+   "dst": "watchfaces/25.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/25-迷你Q版-举高欢呼.webp",
+   "bytes": 381134
+  },
+  {
+   "dst": "watchfaces/26.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/26-挥手-眨眼告别.webp",
+   "bytes": 380282
+  },
+  {
+   "dst": "watchfaces/27.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/27-比心-歪头害羞.webp",
+   "bytes": 349070
+  },
+  {
+   "dst": "watchfaces/28.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/28-晚安-打哈欠.webp",
+   "bytes": 418016
+  },
+  {
+   "dst": "watchfaces/29.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/29-打卡成功-比耶举徽章.webp",
+   "bytes": 360438
+  },
+  {
+   "dst": "watchfaces/30.webp",
+   "src": "/home/hatch/workspace/banpai/pack-watchfaces/30-听一听-手放耳边.webp",
+   "bytes": 408970
+  },
+  {
+   "dst": "outfits/01.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-ice-blue-daily-0-c49d6d60-2b91-422f-8385-0080d9cf3bdc.webp",
+   "bytes": 730792
+  },
+  {
+   "dst": "outfits/02.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-ice-crystal-gown-0-fa95b095-9b5d-461c-bde8-b01c8e5901ca.webp",
+   "bytes": 734916
+  },
+  {
+   "dst": "outfits/03.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-summer-flower-dr-0-2a636ee8-fe0d-40dc-b0e7-1d18020d3a42.webp",
+   "bytes": 639792
+  },
+  {
+   "dst": "outfits/04.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-snow-night-warm-0-7f121e82-cf0b-408b-a1f2-3c9e40f7ef68.webp",
+   "bytes": 607674
+  },
+  {
+   "dst": "outfits/05.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-spring-lilac-0-4131b31d-f61d-4b73-992c-a9fed9d6a280.webp",
+   "bytes": 793908
+  },
+  {
+   "dst": "outfits/06.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-aurora-night-0-03aac078-41ed-4431-9203-cafcc123a6a5.webp",
+   "bytes": 592286
+  },
+  {
+   "dst": "outfits/07.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-golden-morning-0-efef979c-31c7-429b-acb7-699c3ee033d6.webp",
+   "bytes": 555196
+  },
+  {
+   "dst": "outfits/08.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-snow-red-plum-0-e0a14753-6196-4bac-be12-05accea043c2.webp",
+   "bytes": 755184
+  },
+  {
+   "dst": "outfits/09.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-russian-fur-0-4bbdb462-cf10-4488-a7d1-d83f416c75d1.webp",
+   "bytes": 723528
+  },
+  {
+   "dst": "outfits/10.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-baroque-ball-0-8ede9763-7c2d-4977-b766-ee6b20049c22.webp",
+   "bytes": 839520
+  },
+  {
+   "dst": "outfits/11.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-ice-lantern-nigh-0-4667ad7d-714b-49f7-b711-aadbdfce9fe3.webp",
+   "bytes": 753502
+  },
+  {
+   "dst": "outfits/12.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-ski-sport-0-ddae89a0-701b-4350-b013-ae87655e8097.webp",
+   "bytes": 675212
+  },
+  {
+   "dst": "outfits/13.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-snow-town-red-0-ae1ba735-11cb-48e7-9e98-46eb04bfc999.webp",
+   "bytes": 644906
+  },
+  {
+   "dst": "outfits/14.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-concert-gown-0-41b7d2cd-7bf4-4c23-8385-da34138c0c68.webp",
+   "bytes": 777392
+  },
+  {
+   "dst": "outfits/15.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-summer-river-0-61650b67-69f9-4364-9253-46aea12e5226.webp",
+   "bytes": 708168
+  },
+  {
+   "dst": "outfits/16.webp",
+   "src": "/home/hatch/workspace/banpai/assets/outfits/media-generation-banpai-outfit-autumn-maple-0-455f4eff-de73-479c-95d3-bb5dd6f86c24.webp",
+   "bytes": 701584
+  },
+  {
+   "dst": "outfits/17.webp",
+   "src": "reuse of outfits/05.webp",
+   "bytes": 793908
+  },
+  {
+   "dst": "guardian-cards/01.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-central-street-v-0-807ad9ee-6363-4641-b66a-820dd7b6b2cd.webp",
+   "bytes": 756434
+  },
+  {
+   "dst": "guardian-cards/02.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-sophia-v3-clean-0-cbce5f73-13dd-4d52-b6a9-57689fec872a.webp",
+   "bytes": 802136
+  },
+  {
+   "dst": "guardian-cards/03.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-songhua-v3-clean-0-ba92cc24-fc4a-4b1d-bbda-aa188ea949e6.webp",
+   "bytes": 716096
+  },
+  {
+   "dst": "guardian-cards/04.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-old-hall-v5-titl-0-cf0a4f9f-f0c6-472f-ad7e-c53371461dac.webp",
+   "bytes": 911936
+  },
+  {
+   "dst": "guardian-cards/05.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-grand-theatre-v4-0-b6503307-b3d6-4d42-8473-c8a60e0050bf.webp",
+   "bytes": 707290
+  },
+  {
+   "dst": "guardian-cards/06.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-laodaowai-v4-cle-0-9d9b9d4c-1057-432d-8925-28cd2be6557c.webp",
+   "bytes": 999252
+  },
+  {
+   "dst": "guardian-cards/07.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-polar-v3-clean-0-effaad4b-5165-4cb8-bb90-9c5e036023ff.webp",
+   "bytes": 667462
+  },
+  {
+   "dst": "guardian-cards/08.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-tiger-v3-clean-0-59e08092-d22f-4218-946b-cbe0c0be8cdb.webp",
+   "bytes": 726340
+  },
+  {
+   "dst": "guardian-cards/09.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-sun-island-v4-cl-0-d26de461-b871-4293-bfd3-8b980b3d1de3.webp",
+   "bytes": 722846
+  },
+  {
+   "dst": "guardian-cards/10.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-flood-memorial-v-0-f4f84b5e-07a7-4e46-9a92-44ab863727de.webp",
+   "bytes": 623952
+  },
+  {
+   "dst": "guardian-cards/11.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-modern-icepop-v4-0-442c850b-e0f6-43ce-8eb6-cec9682f35e4.webp",
+   "bytes": 949564
+  },
+  {
+   "dst": "guardian-cards/12.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-ice-snow-world-v-0-340383c7-a97c-46e8-a2f5-acabc5b05299.webp",
+   "bytes": 663676
+  },
+  {
+   "dst": "guardian-cards/13.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-volga-v3-video-v-0-228b031e-2eeb-4eba-b532-bb15099e8a81.webp",
+   "bytes": 609926
+  },
+  {
+   "dst": "guardian-cards/14.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-gogol-v2-0-63bf14ee-dab2-43aa-9ddf-8388d9a42e17.webp",
+   "bytes": 623646
+  },
+  {
+   "dst": "guardian-cards/15.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-stalin-v2-0-8b035c69-4c43-4473-bdbe-a85f8e65e34e.webp",
+   "bytes": 538990
+  },
+  {
+   "dst": "guardian-cards/16.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-railway-bridge-v-0-9181469e-0357-49aa-9e33-33f47c7515fe.webp",
+   "bytes": 802234
+  },
+  {
+   "dst": "guardian-cards/17.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-zhaolin-v4-clean-0-0264bc49-6879-4b0f-a870-5139ddcdb10f.webp",
+   "bytes": 805706
+  },
+  {
+   "dst": "guardian-cards/18.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-music-hall-v3-cl-0-e571a87b-13a5-410e-ab5d-944b7bf60292.webp",
+   "bytes": 623628
+  },
+  {
+   "dst": "guardian-cards/19.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-dragon-tower-v4-0-16623cd5-bf14-4ac8-afe7-0bbb049cdf32.webp",
+   "bytes": 607572
+  },
+  {
+   "dst": "guardian-cards/20.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-russian-town-v3-0-94bdd718-7c03-46e2-b9b5-93d0169f8023.webp",
+   "bytes": 574466
+  },
+  {
+   "dst": "guardian-cards/21.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-yabuli-ski-0-8c85d5f6-7158-4932-83d8-93369b21abae.webp",
+   "bytes": 646012
+  },
+  {
+   "dst": "guardian-cards/22.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-snow-town-mushro-0-5fcd1e18-0e4c-4d44-9bea-19003fa1a6f8.webp",
+   "bytes": 726330
+  },
+  {
+   "dst": "guardian-cards/23.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-music-corridor-v-0-64731e9f-4c5f-4042-bf34-261eb8b83856.webp",
+   "bytes": 759398
+  },
+  {
+   "dst": "guardian-cards/24.webp",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-cards/media-generation-guardian-card-beer-museum-bubb-0-4aceb1b8-0a32-46ed-aaf8-2b9f25fdc095.webp",
+   "bytes": 762222
+  },
+  {
+   "dst": "guardian-videos/01.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-central-street-0-e94f8f5f-ffe5-4fb1-bc1e-b3a8ec617485.mp4",
+   "bytes": 11316006
+  },
+  {
+   "dst": "guardian-videos/02.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-sophia-bell-v2-0-a0f8a25b-3403-45e4-92ff-7a5b28d5cc85.mp4",
+   "bytes": 9611786
+  },
+  {
+   "dst": "guardian-videos/03.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-songhua-ice-v2-0-0c13f051-e780-43d4-847f-49d97f9618a4.mp4",
+   "bytes": 8034491
+  },
+  {
+   "dst": "guardian-videos/04.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-old-hall-v2-0-9b411199-f241-4d34-99bc-d6495a2a02ad.mp4",
+   "bytes": 10590875
+  },
+  {
+   "dst": "guardian-videos/05.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-grand-theatre-v-0-d0de2bda-86b3-4f27-b52c-e51389686ef8.mp4",
+   "bytes": 7988085
+  },
+  {
+   "dst": "guardian-videos/06.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-laodaowai-v2-0-aa6093fd-7d1d-4c44-8404-8c0154010397.mp4",
+   "bytes": 8917307
+  },
+  {
+   "dst": "guardian-videos/07.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-polar-v2-0-63196eee-d28d-46e7-a276-83fb721ca484.mp4",
+   "bytes": 7136685
+  },
+  {
+   "dst": "guardian-videos/08.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-tiger-v2-0-192f68a4-ec2e-44a7-84ec-0010af764f53.mp4",
+   "bytes": 6918178
+  },
+  {
+   "dst": "guardian-videos/09.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-sun-island-v2-0-4c2bb80c-56ef-4060-aaf8-71a1c8e6b7b6.mp4",
+   "bytes": 5482941
+  },
+  {
+   "dst": "guardian-videos/10.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-flood-memorial-0-5a0b5614-e02a-425f-a136-e6fc252488eb.mp4",
+   "bytes": 7242408
+  },
+  {
+   "dst": "guardian-videos/11.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-modern-icepop-v-0-c3f66ba8-15f9-4f2e-ae62-dfb5b5349b50.mp4",
+   "bytes": 6576852
+  },
+  {
+   "dst": "guardian-videos/12.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-ice-snow-world-0-30cb8b99-a67f-4f18-a193-ad896929fafc.mp4",
+   "bytes": 6328865
+  },
+  {
+   "dst": "guardian-videos/13.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-volga-v2-0-76a585a3-9f6c-4286-a6f2-6b66cd8300bd.mp4",
+   "bytes": 7201223
+  },
+  {
+   "dst": "guardian-videos/14.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-gogol-v2-0-184d9b1e-4791-4771-84ef-38227f98aa11.mp4",
+   "bytes": 6645323
+  },
+  {
+   "dst": "guardian-videos/15.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-stalin-v2-0-54ecd2ca-7595-4924-955d-7ebbd489ad81.mp4",
+   "bytes": 11542808
+  },
+  {
+   "dst": "guardian-videos/16.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-railway-bridge-0-ef52245e-2e22-422c-9f0f-45e09feec580.mp4",
+   "bytes": 8194456
+  },
+  {
+   "dst": "guardian-videos/17.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-zhaolin-v2-0-0382cda4-b252-4115-9318-fbb814a78c9e.mp4",
+   "bytes": 7275274
+  },
+  {
+   "dst": "guardian-videos/18.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-music-hall-v2-0-4a288a80-0050-4d45-815d-4619a8dd60ef.mp4",
+   "bytes": 7847713
+  },
+  {
+   "dst": "guardian-videos/19.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-dragon-tower-v2-0-7b1c1f43-a2e8-4a25-9a59-fc3f136ef394.mp4",
+   "bytes": 4756047
+  },
+  {
+   "dst": "guardian-videos/20.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-russian-town-v2-0-12f37fc4-5b84-4269-9fc8-804cbff49340.mp4",
+   "bytes": 8481117
+  },
+  {
+   "dst": "guardian-videos/21.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-yabuli-ski-0-718d7ca7-ae40-4937-b272-4d798c0ffe61.mp4",
+   "bytes": 9752868
+  },
+  {
+   "dst": "guardian-videos/22.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-snow-town-mushr-0-10e83f74-6064-47bf-8360-2ad2cf4bac75.mp4",
+   "bytes": 6763542
+  },
+  {
+   "dst": "guardian-videos/23.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-music-corridor-0-5026c307-e864-423a-ab8c-53f6ad12b17d.mp4",
+   "bytes": 9018597
+  },
+  {
+   "dst": "guardian-videos/24.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/guardian-videos/media-generation-guardian-video-beer-museum-bub-0-6852c6b5-c380-43ff-84c2-9ea33e00b05f.mp4",
+   "bytes": 9489849
+  },
+  {
+   "dst": "food/01.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/04-马迭尔冰棍.webp",
+   "bytes": 143588
+  },
+  {
+   "dst": "food/02.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/03-哈尔滨红肠.webp",
+   "bytes": 306980
+  },
+  {
+   "dst": "food/03.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/05-大列巴.webp",
+   "bytes": 345868
+  },
+  {
+   "dst": "food/04.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/01-锅包肉.webp",
+   "bytes": 496382
+  },
+  {
+   "dst": "food/05.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/09-杀猪菜.webp",
+   "bytes": 213194
+  },
+  {
+   "dst": "food/07.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/26-糖葫芦.webp",
+   "bytes": 600298
+  },
+  {
+   "dst": "food/08.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/27-粘豆包.webp",
+   "bytes": 495918
+  },
+  {
+   "dst": "food/09.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/14-哈尔滨啤酒.webp",
+   "bytes": 202696
+  },
+  {
+   "dst": "food/10.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/06-格瓦斯.webp",
+   "bytes": 509054
+  },
+  {
+   "dst": "food/11.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/07-俄式西餐.webp",
+   "bytes": 279134
+  },
+  {
+   "dst": "food/13.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/31-华梅面包.webp",
+   "bytes": 588990
+  },
+  {
+   "dst": "food/15.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/18-酱骨架.webp",
+   "bytes": 441786
+  },
+  {
+   "dst": "food/17.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/30-铁锅炖大鹅.webp",
+   "bytes": 607444
+  },
+  {
+   "dst": "food/18.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/12-冻梨冻柿子.webp",
+   "bytes": 469820
+  },
+  {
+   "dst": "food/19.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/12-冻梨冻柿子.webp",
+   "bytes": 469820
+  },
+  {
+   "dst": "food/21.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/11-哈尔滨烧烤.webp",
+   "bytes": 568740
+  },
+  {
+   "dst": "food/22.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/10-哈尔滨水饺.webp",
+   "bytes": 319524
+  },
+  {
+   "dst": "food/28.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/29-小肚.webp",
+   "bytes": 608164
+  },
+  {
+   "dst": "food/29.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/20-老道外手撕鸡.webp",
+   "bytes": 296934
+  },
+  {
+   "dst": "food/31.webp",
+   "src": "/home/hatch/workspace/banpai/assets/food/15-隐藏雪墩.webp",
+   "bytes": 229072
+  },
+  {
+   "dst": "postcards/01.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/01-中央大街.webp",
+   "bytes": 869488
+  },
+  {
+   "dst": "postcards/02.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/02-索菲亚教堂.webp",
+   "bytes": 770582
+  },
+  {
+   "dst": "postcards/03.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/03-松花江.webp",
+   "bytes": 767912
+  },
+  {
+   "dst": "postcards/04.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/04-老会堂.webp",
+   "bytes": 841546
+  },
+  {
+   "dst": "postcards/05.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/05-大剧院.webp",
+   "bytes": 699814
+  },
+  {
+   "dst": "postcards/06.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/06-老道外.webp",
+   "bytes": 862206
+  },
+  {
+   "dst": "postcards/07.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/07-极地公园.webp",
+   "bytes": 675140
+  },
+  {
+   "dst": "postcards/08.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/08-虎林园.webp",
+   "bytes": 856918
+  },
+  {
+   "dst": "postcards/09.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/09-太阳岛.webp",
+   "bytes": 600096
+  },
+  {
+   "dst": "postcards/10.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/10-防洪纪念塔.webp",
+   "bytes": 602936
+  },
+  {
+   "dst": "postcards/11.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/11-马迭尔.webp",
+   "bytes": 802516
+  },
+  {
+   "dst": "postcards/12.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/12-冰雪大世界.webp",
+   "bytes": 739404
+  },
+  {
+   "dst": "postcards/13.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/13-伏尔加庄园.webp",
+   "bytes": 838980
+  },
+  {
+   "dst": "postcards/14.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/14-果戈里大街.webp",
+   "bytes": 832142
+  },
+  {
+   "dst": "postcards/15.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/15-斯大林公园.webp",
+   "bytes": 721808
+  },
+  {
+   "dst": "postcards/16.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/16-中东铁路桥.webp",
+   "bytes": 706272
+  },
+  {
+   "dst": "postcards/17.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/17-兆麟公园.webp",
+   "bytes": 815934
+  },
+  {
+   "dst": "postcards/18.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/18-哈尔滨音乐厅.webp",
+   "bytes": 730862
+  },
+  {
+   "dst": "postcards/19.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/19-龙塔.webp",
+   "bytes": 758886
+  },
+  {
+   "dst": "postcards/20.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/20-俄罗斯风情小镇.webp",
+   "bytes": 824888
+  },
+  {
+   "dst": "postcards/21.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/21-亚布力滑雪场.webp",
+   "bytes": 856718
+  },
+  {
+   "dst": "postcards/22.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/22-雪乡.webp",
+   "bytes": 736816
+  },
+  {
+   "dst": "postcards/23.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/23-音乐长廊.webp",
+   "bytes": 802952
+  },
+  {
+   "dst": "postcards/24.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/24-哈尔滨啤酒博物馆.webp",
+   "bytes": 929082
+  },
+  {
+   "dst": "posters/01.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/海报01-打卡成功.webp",
+   "bytes": 492810
+  },
+  {
+   "dst": "posters/02.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/海报02-冰雪大世界之夜.webp",
+   "bytes": 599054
+  },
+  {
+   "dst": "posters/03.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/海报03-春日丁香.webp",
+   "bytes": 610430
+  },
+  {
+   "dst": "posters/04.webp",
+   "src": "/home/hatch/workspace/banpai/pack-postcards/海报04-雪夜暖绒.webp",
+   "bytes": 496960
+  },
+  {
+   "dst": "frames/vertical/01.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/01-冰晶花瓣.png",
+   "bytes": 1588257
+  },
+  {
+   "dst": "frames/vertical/02.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/02-雪夜星空.png",
+   "bytes": 1897980
+  },
+  {
+   "dst": "frames/vertical/03.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/03-中央大街.png",
+   "bytes": 1972669
+  },
+  {
+   "dst": "frames/vertical/04.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/04-索菲亚教堂.png",
+   "bytes": 1651561
+  },
+  {
+   "dst": "frames/vertical/05.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/05-松花江冰裂.png",
+   "bytes": 2290149
+  },
+  {
+   "dst": "frames/vertical/06.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/06-太阳岛雪雕.png",
+   "bytes": 1862902
+  },
+  {
+   "dst": "frames/vertical/07.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/07-冰雪大世界.png",
+   "bytes": 1566560
+  },
+  {
+   "dst": "frames/vertical/08.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/08-春日丁香.png",
+   "bytes": 1703487
+  },
+  {
+   "dst": "frames/vertical/09.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/09-夏日江畔.png",
+   "bytes": 1713274
+  },
+  {
+   "dst": "frames/vertical/10.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/10-秋日枫叶.png",
+   "bytes": 1313609
+  },
+  {
+   "dst": "frames/vertical/11.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/11-极光之夜.png",
+   "bytes": 1292931
+  },
+  {
+   "dst": "frames/vertical/12.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/12-金色晨光.png",
+   "bytes": 1761682
+  },
+  {
+   "dst": "frames/vertical/13.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/13-音乐音符.png",
+   "bytes": 725290
+  },
+  {
+   "dst": "frames/vertical/14.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/14-守护宠.png",
+   "bytes": 1025210
+  },
+  {
+   "dst": "frames/vertical/15.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/15-马迭尔冰棍.png",
+   "bytes": 1202701
+  },
+  {
+   "dst": "frames/vertical/16.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/16-冰灯.png",
+   "bytes": 2054895
+  },
+  {
+   "dst": "frames/vertical/17.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/17-雪乡红灯笼.png",
+   "bytes": 1150922
+  },
+  {
+   "dst": "frames/vertical/18.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/18-伏尔加庄园.png",
+   "bytes": 1863253
+  },
+  {
+   "dst": "frames/vertical/19.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/19-雪花.png",
+   "bytes": 1381657
+  },
+  {
+   "dst": "frames/vertical/20.png",
+   "src": "/home/hatch/workspace/banpai/pack-frames-9x16/20-迷你Q半拍.png",
+   "bytes": 1153792
+  },
+  {
+   "dst": "frames/horizontal/01.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/01-ice-petals-horizontal.png",
+   "bytes": 1751462
+  },
+  {
+   "dst": "frames/horizontal/02.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/02-snowy-night-stars-horizontal.png",
+   "bytes": 1974286
+  },
+  {
+   "dst": "frames/horizontal/03.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/03-central-street-horizontal.png",
+   "bytes": 1495598
+  },
+  {
+   "dst": "frames/horizontal/04.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/04-sophia-horizontal.png",
+   "bytes": 1557528
+  },
+  {
+   "dst": "frames/horizontal/05.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/05-songhua-ice-crack-horizontal.png",
+   "bytes": 2140206
+  },
+  {
+   "dst": "frames/horizontal/06.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/06-sun-island-snow-sculpture-horizontal.png",
+   "bytes": 1893287
+  },
+  {
+   "dst": "frames/horizontal/07.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/07-ice-snow-world-horizontal.png",
+   "bytes": 1166683
+  },
+  {
+   "dst": "frames/horizontal/08.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/08-spring-lilac-horizontal.png",
+   "bytes": 2070965
+  },
+  {
+   "dst": "frames/horizontal/09.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/09-summer-river-horizontal.png",
+   "bytes": 1364080
+  },
+  {
+   "dst": "frames/horizontal/10.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/10-autumn-maple-horizontal.png",
+   "bytes": 1658104
+  },
+  {
+   "dst": "frames/horizontal/11.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/11-aurora-night-horizontal.png",
+   "bytes": 1248206
+  },
+  {
+   "dst": "frames/horizontal/12.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/12-golden-morning-horizontal.png",
+   "bytes": 2049015
+  },
+  {
+   "dst": "frames/horizontal/13.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/13-music-notes-horizontal.png",
+   "bytes": 1293411
+  },
+  {
+   "dst": "frames/horizontal/14.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/14-guardian-pets-horizontal.png",
+   "bytes": 2203604
+  },
+  {
+   "dst": "frames/horizontal/15.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/15-madieer-icepop-horizontal.png",
+   "bytes": 1700408
+  },
+  {
+   "dst": "frames/horizontal/16.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/16-ice-lantern-horizontal.png",
+   "bytes": 2241828
+  },
+  {
+   "dst": "frames/horizontal/17.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/17-snow-town-lanterns-horizontal.png",
+   "bytes": 1477044
+  },
+  {
+   "dst": "frames/horizontal/18.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/18-volga-manor-horizontal.png",
+   "bytes": 1586893
+  },
+  {
+   "dst": "frames/horizontal/19.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/19-snowflakes-horizontal.png",
+   "bytes": 1470235
+  },
+  {
+   "dst": "frames/horizontal/20.png",
+   "src": "/home/hatch/workspace/banpai/assets/frames-horizontal/20-mini-q-banpai-horizontal.png",
+   "bytes": 1342149
+  },
+  {
+   "dst": "camera-styles/base.jpg",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/00-base-central-street-dusk.jpg",
+   "bytes": 436362
+  },
+  {
+   "dst": "camera-styles/style-01.jpg",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/01-bingcheng-jishi.jpg",
+   "bytes": 699673
+  },
+  {
+   "dst": "camera-styles/style-02.jpg",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/02-xueye-dianying.jpg",
+   "bytes": 809880
+  },
+  {
+   "dst": "camera-styles/style-03.jpg",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/03-nuanyang-renxiang.jpg",
+   "bytes": 560288
+  },
+  {
+   "dst": "camera-styles/style-04.jpg",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/04-dingxiang-chunri.jpg",
+   "bytes": 744403
+  },
+  {
+   "dst": "camera-styles/style-05.jpg",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/05-laojie-heibai.jpg",
+   "bytes": 532151
+  },
+  {
+   "dst": "camera-styles/style-06.jpg",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/06-huangjin-shike.jpg",
+   "bytes": 583835
+  },
+  {
+   "dst": "camera-styles/style-07.jpg",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/07-binglan-jingmi.jpg",
+   "bytes": 550378
+  },
+  {
+   "dst": "camera-styles/style-08.jpg",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/08-1998-pailide.jpg",
+   "bytes": 603589
+  },
+  {
+   "dst": "camera-styles/expressions.webp",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/09-expression-library-6-v3.webp",
+   "bytes": 401812
+  },
+  {
+   "dst": "camera-styles/halfbody-01.webp",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/10-half-body-frame-sample-v3.webp",
+   "bytes": 823524
+  },
+  {
+   "dst": "camera-styles/halfbody-02.webp",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/11-half-body-frame-sample-spring-lilac-v1.webp",
+   "bytes": 752548
+  },
+  {
+   "dst": "camera-styles/halfbody-03.webp",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/12-half-body-frame-sample-snow-night-warm-v1.webp",
+   "bytes": 762822
+  },
+  {
+   "dst": "camera-styles/halfbody-04.webp",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/13-half-body-frame-sample-ice-lantern-v1.webp",
+   "bytes": 853896
+  },
+  {
+   "dst": "camera-styles/halfbody-05.webp",
+   "src": "/home/hatch/workspace/banpai/assets/camera-styles/14-half-body-frame-sample-summer-river-v1.webp",
+   "bytes": 726460
+  },
+  {
+   "dst": "greenscreen/backup-01-snow-night-warm-fleece-happy-wave.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/backup-01-snow-night-warm-fleece-happy-wave.mp4",
+   "bytes": 7605964
+  },
+  {
+   "dst": "greenscreen/backup-02-spring-lilac-smelling-lilac-smile.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/backup-02-spring-lilac-smelling-lilac-smile.mp4",
+   "bytes": 5217272
+  },
+  {
+   "dst": "greenscreen/backup-03-ice-lantern-night-curious-point-listen.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/backup-03-ice-lantern-night-curious-point-listen.mp4",
+   "bytes": 5145162
+  },
+  {
+   "dst": "greenscreen/autumn.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-autumn-0-a0e4ef2b-22e3-4bc5-8e23-8116a6b11285.mp4",
+   "bytes": 4698227
+  },
+  {
+   "dst": "greenscreen/blink.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-blink-0-40aa59bf-cf92-4005-a443-b203c738ded6.mp4",
+   "bytes": 3871645
+  },
+  {
+   "dst": "greenscreen/bloom.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-bloom-0-6a6bfa2b-51d3-44f8-900d-11e195cd766d.mp4",
+   "bytes": 4535776
+  },
+  {
+   "dst": "greenscreen/bow.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-bow-0-4739adb7-f775-4077-bcf3-5866bbe6da56.mp4",
+   "bytes": 4086492
+  },
+  {
+   "dst": "greenscreen/checkin.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-checkin-0-698bb79e-11fb-4734-87dc-7ea319339b0c.mp4",
+   "bytes": 5839831
+  },
+  {
+   "dst": "greenscreen/checkin-pho.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-checkin-pho-0-d78791c6-3cc3-4c1b-bcb5-66673fb81129.mp4",
+   "bytes": 3815596
+  },
+  {
+   "dst": "greenscreen/checkin-sta.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-checkin-sta-0-cf11b4c5-1793-411a-8264-28d92c4b8c11.mp4",
+   "bytes": 4928639
+  },
+  {
+   "dst": "greenscreen/goodnight.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-goodnight-0-e37f68d9-6b35-413a-9bb9-0f48843a3cb8.mp4",
+   "bytes": 4357420
+  },
+  {
+   "dst": "greenscreen/greet.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-greet-0-e1cc6610-5e47-416a-a14f-e1035b01c635.mp4",
+   "bytes": 4469939
+  },
+  {
+   "dst": "greenscreen/happy.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-happy-0-dda4d184-8106-4602-9d35-b782142f9e09.mp4",
+   "bytes": 4526491
+  },
+  {
+   "dst": "greenscreen/heart.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-heart-0-886befbe-3d79-402b-a697-dc991c5d0515.mp4",
+   "bytes": 4819916
+  },
+  {
+   "dst": "greenscreen/hello.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-hello-0-9775bbb8-1b33-4cc4-89bd-8cf755a2c002.mp4",
+   "bytes": 4000484
+  },
+  {
+   "dst": "greenscreen/hug.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-hug-0-a52127f2-da75-4de2-815d-5853ffe2b174.mp4",
+   "bytes": 3965059
+  },
+  {
+   "dst": "greenscreen/jump.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-jump-0-54ceecee-0128-48f8-8bea-6d6fa813fd9e.mp4",
+   "bytes": 5886046
+  },
+  {
+   "dst": "greenscreen/kiss.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-kiss-0-d3384205-f0ae-4fdd-b451-b4f998575139.mp4",
+   "bytes": 3298857
+  },
+  {
+   "dst": "greenscreen/listen.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-listen-0-2be29cf8-84fa-4b39-97af-c736483d9bf4.mp4",
+   "bytes": 3524907
+  },
+  {
+   "dst": "greenscreen/listening.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-listening-0-1e449a1b-ea20-4688-a5aa-f6fcc2f59b3b.mp4",
+   "bytes": 3970567
+  },
+  {
+   "dst": "greenscreen/morning.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-morning-0-cbe8e024-0e2c-49f7-a3d5-37ad4750a608.mp4",
+   "bytes": 4917276
+  },
+  {
+   "dst": "greenscreen/notes.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-notes-0-95d5b9ae-5e8c-4fdd-87ff-50fe00dff3eb.mp4",
+   "bytes": 4326276
+  },
+  {
+   "dst": "greenscreen/party-bye.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-party-bye-0-fb368db0-b07f-4bd7-894a-d978ae83d1e9.mp4",
+   "bytes": 3804723
+  },
+  {
+   "dst": "greenscreen/party-clap.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-party-clap-0-b8b6ea12-f5a5-47bc-8018-af72ddc1606e.mp4",
+   "bytes": 6001743
+  },
+  {
+   "dst": "greenscreen/party-dance.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-party-dance-0-53281325-c440-4c5e-a4f8-47fc7d7c8e63.mp4",
+   "bytes": 7355892
+  },
+  {
+   "dst": "greenscreen/party-enter.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-party-enter-0-c7383789-0538-450b-bc7a-b0f6a786c075.mp4",
+   "bytes": 4122689
+  },
+  {
+   "dst": "greenscreen/peek.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-peek-0-d9da45bf-9828-423d-8921-f23b82b40a8d.mp4",
+   "bytes": 4840895
+  },
+  {
+   "dst": "greenscreen/point.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-point-0-79f1b2d0-8cc5-48b1-8290-b5d1907bdf36.mp4",
+   "bytes": 3423922
+  },
+  {
+   "dst": "greenscreen/roll.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-roll-0-773e58e3-b5c0-4f2e-b957-6cd90a9944ef.mp4",
+   "bytes": 5575726
+  },
+  {
+   "dst": "greenscreen/say-line.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-say-line-0-2b179989-c6f9-42c4-ac8d-2eb35cb67bda.mp4",
+   "bytes": 3601180
+  },
+  {
+   "dst": "greenscreen/sit.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-sit-0-a3b7354d-8c34-4db5-80b6-9709c10dcafb.mp4",
+   "bytes": 3326019
+  },
+  {
+   "dst": "greenscreen/slowwalk.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-slowwalk-0-c740374f-b701-4ef2-8241-70d1a6805d3b.mp4",
+   "bytes": 3826655
+  },
+  {
+   "dst": "greenscreen/snow.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-snow-0-04ca651f-96f5-48df-b8e7-ee866f0a8042.mp4",
+   "bytes": 5664057
+  },
+  {
+   "dst": "greenscreen/snowball.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-snowball-0-1384f8bc-a1d4-41e6-894f-35377afaea44.mp4",
+   "bytes": 4954971
+  },
+  {
+   "dst": "greenscreen/spin.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-spin-0-04be7ea3-44d0-470f-aae2-14e44f0774c9.mp4",
+   "bytes": 6844815
+  },
+  {
+   "dst": "greenscreen/spring.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-spring-0-71760403-71bd-48b2-a599-38f3aaad08c2.mp4",
+   "bytes": 4073904
+  },
+  {
+   "dst": "greenscreen/stretch.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-stretch-0-27a7c382-75f5-4393-a649-f115d81a98dc.mp4",
+   "bytes": 4931009
+  },
+  {
+   "dst": "greenscreen/summer.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-summer-0-60f193f7-141c-4612-8ac3-838694f22186.mp4",
+   "bytes": 6687471
+  },
+  {
+   "dst": "greenscreen/surprised.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-surprised-0-7b87742b-4db2-4db6-bfde-5e0640100a95.mp4",
+   "bytes": 3760387
+  },
+  {
+   "dst": "greenscreen/thanks.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-thanks-0-313ad368-742d-4d91-947b-a69372e574b3.mp4",
+   "bytes": 3788480
+  },
+  {
+   "dst": "greenscreen/turn.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-turn-0-deaa5c6e-2f2c-42b4-a004-635815c1db52.mp4",
+   "bytes": 6127357
+  },
+  {
+   "dst": "greenscreen/wave.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-wave-0-160a0408-9652-4394-a779-e867a6bfc1b9.mp4",
+   "bytes": 4774638
+  },
+  {
+   "dst": "greenscreen/winter.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/media-generation-banpai-greenscreen-winter-0-57db7512-1e8a-4b37-84cb-38eae8cf213f.mp4",
+   "bytes": 5178597
+  },
+  {
+   "dst": "greenscreen/di-peek-v7.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/dynamic-island-v2/banpai-di-peek-v7.mp4",
+   "bytes": 5397031
+  },
+  {
+   "dst": "greenscreen/di-roll-v3.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/dynamic-island-v2/banpai-di-roll-v3.mp4",
+   "bytes": 6052127
+  },
+  {
+   "dst": "greenscreen/di-hug-v2.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/dynamic-island-v2/banpai-di-hug-v2.mp4",
+   "bytes": 4444486
+  },
+  {
+   "dst": "greenscreen/di-kiss-v2.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/dynamic-island-v2/banpai-di-kiss-v2.mp4",
+   "bytes": 4281044
+  },
+  {
+   "dst": "greenscreen/di-stretch-v2.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/dynamic-island-v2/banpai-di-stretch-v2.mp4",
+   "bytes": 4174075
+  },
+  {
+   "dst": "greenscreen/di-snowball-v2.mp4",
+   "src": "/home/hatch/workspace/banpai/assets/greenscreen/dynamic-island-v2/banpai-di-snowball-v2.mp4",
+   "bytes": 4908048
+  }
+ ],
+ "skipped": [
+  {
+   "reason": "food-no-image",
+   "detail": "food id 6 素材库无对应图，卡片保持纯文字"
+  },
+  {
+   "reason": "food-no-image",
+   "detail": "food id 12 素材库无对应图，卡片保持纯文字"
+  },
+  {
+   "reason": "food-no-image",
+   "detail": "food id 14 素材库无对应图，卡片保持纯文字"
+  },
+  {
+   "reason": "food-no-image",
+   "detail": "food id 16 素材库无对应图，卡片保持纯文字"
+  },
+  {
+   "reason": "food-no-image",
+   "detail": "food id 20 素材库无对应图，卡片保持纯文字"
+  },
+  {
+   "reason": "food-no-image",
+   "detail": "food id 23 素材库无对应图，卡片保持纯文字"
+  },
+  {
+   "reason": "food-no-image",
+   "detail": "food id 24 素材库无对应图，卡片保持纯文字"
+  },
+  {
+   "reason": "food-no-image",
+   "detail": "food id 25 素材库无对应图，卡片保持纯文字"
+  },
+  {
+   "reason": "food-no-image",
+   "detail": "food id 26 素材库无对应图，卡片保持纯文字"
+  },
+  {
+   "reason": "food-no-image",
+   "detail": "food id 27 素材库无对应图，卡片保持纯文字"
+  },
+  {
+   "reason": "food-no-image",
+   "detail": "food id 30 素材库无对应图，卡片保持纯文字"
+  },
+  {
+   "reason": "frame-known-flaw",
+   "detail": "横 09 夏日江畔：柳枝框饰顶到边角，小角不透明（框饰本身，非夜空底）；横 03 小半拍花瓣浮在头顶周围（4 瓣数对）。生产记录已知，照常内置"
+  },
+  {
+   "reason": "greenscreen-note",
+   "detail": "灵动岛 peek/roll 旧版 v2/v3/v4/v5/v6 及 redo 版未内置，只留定版 v7/v3；其余 43 个绿幕动作全量内置"
+  }
+ ],
+ "total_files": 261,
+ "total_bytes": 598888385,
+ "total_mb": 571.1,
+ "max_single_file_mb": 11.0
+}

@@ -7,12 +7,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import com.banpai.app.data.BANPAI_STANDARD
 import com.banpai.app.data.FAKE_USER
+import com.banpai.app.ui.media.AssetImage
 import com.banpai.app.ui.theme.ThemeMode
 
 /**
@@ -29,6 +35,14 @@ fun ProfileScreen(
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         ScreenHeader("我的", "${FAKE_USER.name} · Lv.${FAKE_USER.level} ${FAKE_USER.levelName}")
+        // 头像：半拍标准图（正好 4 瓣），圆形裁切。
+        AssetImage(
+            assetPath = BANPAI_STANDARD,
+            contentDescription = "半拍头像",
+            modifier = Modifier.size(72.dp).clip(CircleShape),
+            contentScale = ContentScale.Crop
+        )
+        Spacer(modifier = Modifier.height(8.dp))
         Text("能量 ${FAKE_USER.energy} · 冰晶 36（假数据）")
         Text("吧唧徽章：已连接（占位，BLE 未真连）")
         Spacer(modifier = Modifier.height(16.dp))

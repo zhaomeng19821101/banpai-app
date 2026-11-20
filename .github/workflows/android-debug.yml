@@ -3,8 +3,8 @@
 # 用法：把 ~/workspace/banpai-code 整个推到 GitHub 仓库。
 # 公开仓库：标准 Linux runner 免费无限，4 vCPU / 16 GB；
 # 私有仓库：每月 2000 分钟免费，2 vCPU / 8 GB，也够编 debug 包。
-# 每次 push 到 main/master 或手动触发，都会编出 app-debug.apk（保留 7 天），
-# 在 Actions → 该次运行 → Artifacts 里下载。
+# 每次 push 到 main/master 或手动触发，都会编出 app-debug.apk，
+# 作为 GitHub Release 的附件发布（单文件 2GB 上限），在仓库 → Releases 里下载。
 #
 # 注意：
 # - 不用 gradlew：工程里的 gradlew 目前是占位脚本（本机 Gradle daemon 起不来，
@@ -12,7 +12,9 @@
 #   gradle/actions/setup-gradle 装 Gradle 8.7，用 `gradle` 命令编译。
 # - 不需要任何密钥：local.properties 缺省时 AMAP_KEY / AGORA_APP_ID 为空串，
 #   探索页显示占位、派对语音占位。不要把真 key 提交进仓库。
-# - 这只是新框架骨架 v0.1：16 屏可点，高德/声网 SDK 还没接，地图页是占位。
+# - v0.2：素材全内置（图片 + 视频，571MB，见 assets-manifest.json），APK 约 600MB，
+#   离线可看。artifact 上传会超免费存储额度（500MB），所以改走 Release 附件。
+#   地图/语音/小模型仍是占位（待接 AMap / Agora SDK 与 Key）。
 
 name: Android Debug APK
 
@@ -31,6 +33,8 @@ on:
 jobs:
   build-debug:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # 发布 Release 附件需要
     defaults:
       run:
         working-directory: app
@@ -64,10 +68,21 @@ jobs:
       - name: Build debug APK
         run: gradle assembleDebug --no-daemon --stacktrace
 
-      - name: Upload debug APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: banpai-app-debug
-          path: app/app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 7
-          if-no-files-found: error
+      # APK 约 600MB（素材全内置），actions/upload-artifact 会超免费存储额度（500MB），
+      # 所以改走 GitHub Release 附件（单文件 2GB 上限）。每次推 main 就发一个新 Release，
+      # tag = v0.2-<短 commit>；重复跑同一 commit 时改为覆盖上传。
+      - name: Publish APK to GitHub Release
+        run: |
+          APK="app/build/outputs/apk/debug/app-debug.apk"
+          ls -lh "$APK"
+          TAG="v0.2-${GITHUB_SHA:0:7}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$APK" --clobber
+          else
+            gh release create "$TAG" "$APK" \
+              --title "半拍 Banpai v0.2 工程版（$TAG）" \
+              --notes "工程版 v0.2：素材全内置（图片+视频，离线可看），16 屏可点。AMap/Agora Key 未配，地图/语音/小模型为占位；相机 CameraX 与绿幕抠像、BLE 真连、后端联调待下一步。"
+          fi
+          echo "release_tag=$TAG" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}

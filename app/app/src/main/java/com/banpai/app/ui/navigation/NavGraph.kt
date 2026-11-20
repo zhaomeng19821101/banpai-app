@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -133,7 +136,12 @@ fun BanpaiNavGraph(
                                 },
                                 icon = {
                                     Icon(
-                                        imageVector = Icons.Filled.LocationOn,
+                                        imageVector = when (route) {
+                                            Routes.HOME -> Icons.Filled.Home
+                                            Routes.EXPLORE -> Icons.Filled.Search
+                                            Routes.ATLAS -> Icons.Filled.Star
+                                            else -> Icons.Filled.Person
+                                        },
                                         contentDescription = label
                                     )
                                 },
@@ -178,7 +186,10 @@ fun BanpaiNavGraph(
                 )
             }
             composable(Routes.EXPLORE) {
-                ExploreScreen(onOpenCheckIn = { navController.navigate(Routes.CHECKIN) })
+                ExploreScreen(
+                    onOpenCheckIn = { navController.navigate(Routes.CHECKIN) },
+                    onOpenAtlas = { navController.navigate(Routes.ATLAS) }
+                )
             }
             composable(Routes.CHECKIN) {
                 CheckInScreen(onOpenCamera = { navController.navigate(Routes.CAMERA) })

@@ -76,7 +76,7 @@ val GUARDIAN_PETS: List<GuardianPet> = listOf(
 )
 
 // ---------- 表盘工坊 30 款；时钟样式 5 种，时间按款式自动选位置 ----------
-data class Watchface(val id: Int, val name: String, val clockStyle: Int) // clockStyle 0..4
+data class Watchface(val id: Int, val name: String, val clockStyle: Int, val locked: Boolean = false) // clockStyle 0..4
 
 val WATCHFACES: List<Watchface> = listOf(
     Watchface(1, "冰蓝日常", 0),
@@ -102,7 +102,7 @@ val WATCHFACES: List<Watchface> = listOf(
     Watchface(21, "冰雪大世界", 0),
     Watchface(22, "伏尔加庄园", 1),
     Watchface(23, "雪夜暖绒", 2),
-    Watchface(24, "金瓣隐藏", 3), // 第五瓣金瓣隐藏款
+    Watchface(24, "金瓣隐藏", 3, locked = true), // 第五瓣金瓣隐藏款：彩蛋信件解锁前锁定
     Watchface(25, "迷你Q版", 4),
     Watchface(26, "挥手", 0),
     Watchface(27, "比心", 1),
@@ -115,7 +115,7 @@ val WATCHFACES: List<Watchface> = listOf(
 val CLOCK_STYLE_NAMES: List<String> = listOf("顶部居中", "底部居中", "左上", "右下", "环绕表盘")
 
 // ---------- 装扮 3 槽：服装/套装、背景、特效（配饰已去掉）；16 套 ----------
-data class Outfit(val id: Int, val name: String, val slot: String = "服装/套装")
+data class Outfit(val id: Int, val name: String, val slot: String = "服装/套装", val locked: Boolean = false)
 
 val OUTFITS: List<Outfit> = listOf(
     Outfit(1, "冰蓝日常"),
@@ -134,7 +134,7 @@ val OUTFITS: List<Outfit> = listOf(
     Outfit(14, "音乐会礼服"),
     Outfit(15, "夏日江畔装"),
     Outfit(16, "秋日枫叶装"),
-    Outfit(17, "芽开·丁香") // 种芽限定：不售卖，只能开花后领取（奖励型，2026-11-20 定）
+    Outfit(17, "芽开·丁香", locked = true) // 种芽限定：不售卖，只能开花后领取（奖励型，2026-11-20 定）
 )
 
 val DRESSUP_SLOTS: List<String> = listOf("服装/套装", "背景", "特效") // 3 槽，配饰去掉
@@ -155,7 +155,7 @@ val FOODS: List<Food> = listOf(
     Food(10, "格瓦斯"),
     Food(11, "俄式罐焖牛肉"),
     Food(12, "红菜汤"),
-    Food(13, "列巴"),
+    Food(13, "华梅面包"), // 原名“列巴”（与 3 号大列巴重复）；v3 定版已解锁 3 种之一，图为 31-华梅面包.webp
     Food(14, "扒鸡"),
     Food(15, "酱骨头"),
     Food(16, "酸菜白肉血肠"),

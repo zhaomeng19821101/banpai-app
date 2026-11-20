@@ -15,16 +15,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.banpai.app.data.BANPAI_STANDARD
 import com.banpai.app.data.FAKE_USER
 import com.banpai.app.data.MINI_GAME_NOTE
 import com.banpai.app.data.SPROUT_REWARD_OUTFIT
 import com.banpai.app.data.SPROUT_WATERS_TO_BLOOM
 import com.banpai.app.data.SproutState
+import com.banpai.app.ui.media.AssetImage
 
 /**
  * 首页：定版一屏不下拉；旅行连胜已删。
- * 英雄卡 + 半拍问候 + 快捷入口；小游戏只在吧唧上，首页只留一句话说明。
+ * 英雄卡（半拍标准图）+ 半拍问候 + 快捷入口；小游戏只在吧唧上，首页只留一句话说明。
  * 一起种芽在英雄卡下：每天浇水 1 次，累计 7 次开花，领限定装扮「芽开·丁香」（奖励型，2026-11-20 定）。
  */
 @Composable
@@ -44,8 +47,16 @@ fun HomeScreen(
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("你好呀，今天也要慢慢走哦。")
         Spacer(modifier = Modifier.height(8.dp))
+        // 英雄卡：半拍标准图（正好 4 瓣）。
+        AssetImage(
+            assetPath = BANPAI_STANDARD,
+            contentDescription = "半拍",
+            modifier = Modifier.fillMaxWidth().height(190.dp),
+            contentScale = ContentScale.Crop
+        )
+        Spacer(modifier = Modifier.height(8.dp))
         Text("${FAKE_USER.name} · Lv.${FAKE_USER.level} ${FAKE_USER.levelName} · 能量 ${FAKE_USER.energy}")
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         Row(modifier = Modifier.fillMaxWidth()) {
             OutlinedButton(onClick = onOpenExplore, modifier = Modifier.weight(1f)) { Text("去探索") }
             OutlinedButton(onClick = onOpenCheckIn, modifier = Modifier.weight(1f)) { Text("去打卡") }
@@ -68,9 +79,9 @@ fun HomeScreen(
             OutlinedButton(onClick = onOpenDiary, modifier = Modifier.weight(1f)) { Text("日记") }
             OutlinedButton(onClick = onOpenPostcard, modifier = Modifier.weight(1f)) { Text("明信片") }
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         Text(MINI_GAME_NOTE)
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         // 一起种芽：浇水 → 开花 → 领限定装扮（奖励型，2026-11-20 定）。
         // 本地假数据状态；联调后改为 ApiClient.sprout() / water() / claim()。
         var sprout by remember { mutableStateOf(SproutState()) }

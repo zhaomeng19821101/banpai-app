@@ -139,11 +139,11 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
 | App 探索页高德、相机 CameraX、BLE 真机、Agora、登录短信/微信 | 占位（待 key + 真机） |
 | 固件 BLE 8 特征、菜单 8 功能页、敲击记分、OTA 双分区 | 骨架已接通（代码层），驱动层全部 `TODO(HW)` 占位 |
 | 固件 CO5300 屏驱、QMI8658、 CST9217、AXP2101 电量 | 占位（Serial stub / 假值，实测前不要采信电量） |
-| 素材 | 未复制进本仓库；引用说明指向 `~/workspace/banpai/assets/`，接入时按 `backend/app/routers/assets.py` 的清单挂 |
+| 素材 | **v0.2 已全量内置**：`app/app/src/main/assets/` 261 个文件、571.1 MB（图片 + 守护宠视频 + 绿幕视频，离线可看；清单 `assets-manifest.json`，打包脚本 `tools/stage_assets.py`）。APK 约 600 MB，CI 改走 GitHub Release 附件（`v0.2-<短 commit>`），artifact 上传会超免费额度 |
 
 ## 未验证清单（不要假装通过）
 
-- **App：本机无 JDK/Android SDK，未跑 `./gradlew assembleDebug`**。首次真编译可能暴露版本/依赖细节问题；`gradlew` 是占位脚本，需在 Android Studio 里生成标准 Wrapper。
+- **App：v0.1 已在 GitHub Actions 编出（第 8 跑成功，APK 17 MB，纯骨架无素材）；v0.2 素材全内置（571 MB，APK 约 600 MB），CI 改走 Release 附件——首个 v0.2 构建待本次 push 后验证。** 本机无 JDK/Android SDK，未跑 `./gradlew assembleDebug`；`gradlew` 是占位脚本，需在 Android Studio 里生成标准 Wrapper。
 - **固件：本机无 PlatformIO、无实板，未跑 `pio run` / `pio check`，未烧录**。`platformio.ini` 里的 LCD/触摸/IMU/AXP 引脚是公开资料默认值，未在实板验证；CO5300、QMI8658（敲击阈值 1.8g 需实测调）、CST9217、AXP2101 均未联调。
 - **后端未验证**：短信/微信为 demo 模拟（固定码）；Agora TokenBuilder 未接（无证书）；小模型未接（无服务地址）；月卡支付、PostgreSQL 切换、Alembic 迁移未验证；`app/main.py` 仍用已废弃的 `@app.on_event("startup")`（能用，有 DeprecationWarning）。
 - **端到端未验证**：敲吧唧两下拍照、Agora 入会、房间 IM 真机、高德 debug 包出图、镜头变形/EXIF 方向实拍、OTA 回滚实测。

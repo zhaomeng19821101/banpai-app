@@ -58,6 +58,12 @@ android {
         compose = true
         buildConfig = true
     }
+
+    // 素材全部内置：视频不压缩进包（ExoPlayer 可直接读 assets，加载快）；
+    // 图片 webp/png 本身已压缩，noCompress 只影响存储方式，不影响体积。
+    aaptOptions {
+        noCompress("mp4")
+    }
 }
 
 dependencies {
@@ -80,7 +86,11 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
-    // BLE：用 Android 框架 android.bluetooth（见 data/BleManager.kt），无需额外依赖。
+    // 视频播放：Media3 ExoPlayer（守护宠视频 / 绿幕乱入 / 欢迎视频）。
+    // 素材在 app/src/main/assets/（见 tools/stage_assets.py 与 assets-manifest.json），
+    // 播 asset:/// 路径，不走网络。
+    implementation("androidx.media3:media3-exoplayer:1.3.1")
+    implementation("androidx.media3:media3-ui:1.3.1")
 
     // ---- 接入点占位（未启用，按需取消注释）----
     // CameraX 接入点：相机页（ui/screens/CameraScreen.kt）预留，拍照乱入用真绿幕视频。

@@ -1,8 +1,19 @@
 package com.banpai.app.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,31 +21,137 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.banpai.app.data.CAMERA_EXPRESSIONS
+import com.banpai.app.data.CAMERA_STYLE_BASE
+import com.banpai.app.data.Cameo
+import com.banpai.app.data.cameraStyleAsset
+import com.banpai.app.data.frameHorizontalAsset
+import com.banpai.app.data.frameVerticalAsset
+import com.banpai.app.data.halfBodyAsset
+import com.banpai.app.ui.media.AssetImage
+import com.banpai.app.ui.media.AssetVideo
 
 /**
- * 相机页：预留 CameraX 接入点（androidx.camera，占位，见 app/build.gradle.kts 注释依赖）。
- * 拍照乱入用真绿幕视频（assets 引用占位）：
- *   视频文件在 ~/workspace/banpai/assets/greenscreen/，不复制大文件进工程；
- *   接入时用 ExoPlayer + 绿幕抠像（chroma-key）叠加到取景画面，拍照与录像都支持乱入。
- * 6 风格、5 尺寸、40 相框（20 横 + 20 竖）；HDR / 美颜占位。
+ * 相机页：CameraX 接入点占位（androidx.camera，见 app/build.gradle.kts 注释依赖），
+ * 但乱入是真绿幕视频（内置，循环播）：3 种入场——探头（v7 色彩校正版）/ 挥手 / 惊喜跳入，
+ * 带乱入开关；关掉乱入显示风格底图。
+ * 8 种大师级风格（精品策展，非冷暖滤镜）、40 相框（20 横 + 20 竖，边框分类里挑，
+ * 不堆一堆让用户翻）、6 表情库 + 5 半身像框样张都是真图。
+ * 录像也支持乱入。HDR / 美颜占位。
  * 敲吧唧两下拍照：BLE TAP 通知 T:shutter 到达后触发快门（见 BleManager）。
+ * 注意：绿幕抠像（chroma-key）叠加到取景画面是下一步；现在乱入视频在取景框里循环预览。
  */
-private val CAMERA_STYLES = listOf("冰蓝", "雪夜", "丁香", "暖金", "复古", "胶片")
+private val CAMERA_STYLES = listOf("冰城纪实", "雪夜电影", "暖阳人像", "丁香春日", "老街黑白", "黄金时刻", "冰灯夜游", "1998 拍立得")
 private val CAMERA_SIZES = listOf("1:1", "4:3", "16:9", "3:4", "9:16")
 
 @Composable
 fun CameraScreen() {
     var style by remember { mutableStateOf(CAMERA_STYLES[0]) }
     var size by remember { mutableStateOf(CAMERA_SIZES[0]) }
+    var cameoOn by remember { mutableStateOf(true) }
+    var cameo by remember { mutableStateOf(Cameo.PEEK) }
+    var frameV by remember { mutableStateOf(1) }
+    var frameH by remember { mutableStateOf(1) }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        ScreenHeader("拍照", "CameraX 接入点占位 · 乱入用真绿幕视频")
-        Text("取景器占位（CameraX PreviewView 接入点）")
-        Text("当前风格：$style（共 6 种大师级风格，精品策展，非冷暖滤镜）")
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        ScreenHeader("拍照", "乱入是真绿幕视频 · 8 大师风格 · 40 相框")
+        // 取景器：乱入视频循环播（开）或风格底图（关）。
+        if (cameoOn) {
+            AssetVideo(
+                assetPath = cameo,
+                modifier = Modifier.fillMaxWidth().height(320.dp),
+                loop = true,
+                muted = true,
+                showControls = false
+            )
+            Text("乱入预览：绿幕视频循环播（绿幕抠像叠加到取景画面是下一步）")
+        } else {
+            AssetImage(
+                assetPath = CAMERA_STYLE_BASE,
+                contentDescription = "取景底图",
+                modifier = Modifier.fillMaxWidth().height(320.dp),
+                contentScale = ContentScale.Crop
+            )
+            Text("乱入已关：取景底图（中央大街黄昏）")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(modifier = Modifier.fillMaxWidth()) {
+            OutlinedButton(onClick = { cameoOn = !cameoOn }, modifier = Modifier.weight(1f)) {
+                Text(if (cameoOn) "乱入：开" else "乱入：关")
+            }
+            OutlinedButton(onClick = { cameo = Cameo.PEEK }, modifier = Modifier.weight(1f)) { Text("探头") }
+            OutlinedButton(onClick = { cameo = Cameo.WAVE }, modifier = Modifier.weight(1f)) { Text("挥手") }
+            OutlinedButton(onClick = { cameo = Cameo.JUMP }, modifier = Modifier.weight(1f)) { Text("惊喜跳入") }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text("当前风格：$style（8 种大师级风格，精品策展，非冷暖滤镜）")
+        LazyRow(modifier = Modifier.fillMaxWidth()) {
+            items(CAMERA_STYLES.withIndex().toList()) { (index, s) ->
+                Column(modifier = Modifier.padding(end = 8.dp).clickable { style = s }) {
+                    AssetImage(
+                        assetPath = cameraStyleAsset(index + 1),
+                        contentDescription = s,
+                        modifier = Modifier.width(96.dp).height(72.dp),
+                        contentScale = ContentScale.Crop
+                    )
+                    Text(s)
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
         Text("当前尺寸：$size（共 5 种）")
-        Text("相框：40 个（20 横 + 20 竖）占位")
-        Text("绿幕乱入视频：~/workspace/banpai/assets/greenscreen/（引用占位，不复制大文件）")
+        Text("相框 · 竖 20（已选 $frameV 号）")
+        LazyRow(modifier = Modifier.fillMaxWidth()) {
+            items((1..20).toList()) { n ->
+                Column(modifier = Modifier.padding(end = 8.dp).clickable { frameV = n }) {
+                    AssetImage(
+                        assetPath = frameVerticalAsset(n),
+                        contentDescription = "竖框 $n 号",
+                        modifier = Modifier.width(54.dp).height(96.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                    Text("$n 号")
+                }
+            }
+        }
+        Text("相框 · 横 20（已选 $frameH 号）")
+        LazyRow(modifier = Modifier.fillMaxWidth()) {
+            items((1..20).toList()) { n ->
+                Column(modifier = Modifier.padding(end = 8.dp).clickable { frameH = n }) {
+                    AssetImage(
+                        assetPath = frameHorizontalAsset(n),
+                        contentDescription = "横框 $n 号",
+                        modifier = Modifier.width(96.dp).height(54.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                    Text("$n 号")
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text("表情库（6 格）与半身像框（5 张样张）")
+        AssetImage(
+            assetPath = CAMERA_EXPRESSIONS,
+            contentDescription = "6 表情库",
+            modifier = Modifier.fillMaxWidth().height(120.dp),
+            contentScale = ContentScale.Crop
+        )
+        LazyRow(modifier = Modifier.fillMaxWidth()) {
+            items((1..5).toList()) { n ->
+                AssetImage(
+                    assetPath = halfBodyAsset(n),
+                    contentDescription = "半身像框样张 $n",
+                    modifier = Modifier.width(96.dp).height(128.dp).padding(end = 8.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
         Text("录像也支持乱入。HDR / 美颜占位。")
         GoldButton("拍照", onClick = { /* TODO CameraX takePicture */ })
         GoldButton("敲吧唧两下也能拍（BLE TAP 占位）", onClick = { /* TODO BleManager 订阅 T:shutter */ })
