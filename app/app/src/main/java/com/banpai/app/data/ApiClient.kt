@@ -4,7 +4,9 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 /**
  * 半拍 Banpai — 后端 API 占位（Retrofit）。
@@ -25,6 +27,16 @@ object ApiClient {
         val reward_outfit: String
     )
 
+    /** 好友对讲控件取 token 的响应（后端 /friends/{id}/space-token）。 */
+    data class SpaceToken(
+        val app_id: String,
+        val token: String,
+        val channel: String,
+        val uid: Int,
+        val expires_in: Int,
+        val placeholder: Boolean
+    )
+
     interface BanpaiApi {
         @GET("health")
         suspend fun health(): Map<String, String>
@@ -39,6 +51,14 @@ object ApiClient {
 
         @POST("sprout/claim")
         suspend fun claimSprout(): Map<String, Any>
+
+        // 好友对讲控件：好友 1:1 实时对讲取 token（声网）。auth 为登录 Bearer token；
+        // placeholder=true 时不要真连，界面应提示原因（后端未配置证书或未部署）。
+        @GET("friends/{friendId}/space-token")
+        suspend fun friendSpaceToken(
+            @Path("friendId") friendId: Int,
+            @Header("Authorization") auth: String
+        ): SpaceToken
     }
 
     private val httpClient: OkHttpClient = OkHttpClient.Builder().build()

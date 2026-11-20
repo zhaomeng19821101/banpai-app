@@ -107,8 +107,8 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
 
 | Key / 配置 | 在哪配 | 没配时会怎样 |
 |---|---|---|
-| `AMAP_KEY` | `app/local.properties`、后端 `.env` | 探索页显示占位说明，不画假地图；后端路线接口返回直线距离占位 |
-| `AGORA_APP_ID` / `AGORA_APP_CERTIFICATE` | App `local.properties` / 后端 `.env`（证书只留服务端） | 派对 token 接口返回占位串，语音入会不可用 |
+| `AMAP_KEY` | `app/local.properties`、后端 `.env` | 无 Key 时探索页显示占位说明，不画假地图；后端路线接口返回直线距离占位。**已接通**：3D 地图 SDK 10.0.600 + MapView（2026-11-20）。**注意：Key 只登记了 release SHA1，CI 出的 debug 包地图仍会是黑的**——预期内；真机验地图要打 release 包，或在高德控制台补登记 debug SHA1 |
+| `AGORA_APP_ID` / `AGORA_APP_CERTIFICATE` | App `local.properties` / 后端 `.env`（证书只留服务端） | 未配置时 token 接口返回占位串，语音入会不可用。**范围（2026-11-20 用户锁定）**：公共区域（派对房间 / 公共花园）不用声网实时语音；只给好友 1:1 实时对讲（好友对讲控件）用。**TokenBuilder 已接通**：后端用 `agora-token-builder` 签发真实 006 格式 token（24 个后端测试含 5 个 token 用例，全过） |
 | `SMALL_MODEL_URL` / `SMALL_MODEL_API_KEY` | 后端 `.env` | 花语用本地锁定回答 / “我还小，帮你去打听”口径 |
 | `JWT_SECRET` | 后端 `.env` | 当前为开发占位串，部署前必须换随机长串 |
 | `DATABASE_URL` | 后端 `.env` | 默认 SQLite 开发库 `banpai.db` |
@@ -136,7 +136,10 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
 |---|---|
 | 后端全部路由 + 能量账本 + 日记种子 + 花语打听口径 | 已接通（本机实测） |
 | App 16 屏导航 + 昼夜三档 + 假数据层 | 已接通（假数据） |
-| App 探索页高德、相机 CameraX、BLE 真机、Agora、登录短信/微信 | 占位（待 key + 真机） |
+| App 探索页高德真地图（SDK 10.0.600 + MapView + 24 落点） | 已接通（代码层）；**真机地图待 release 包验证**（Key 只认 release SHA1，debug 包黑图是预期） |
+| App 相机 CameraX、BLE 真机、登录短信/微信 | 占位（待 key + 真机） |
+| 声网：好友 1:1 实时对讲（好友对讲控件）+ 后端真实 token 签发 | 已接通（代码层 + 24 测试）；**双人真机对讲待验证**（需登录接通 + 两台真机） |
+| 声网：公共区域（派对房间 / 公共花园）实时语音 | **已取消**（2026-11-20 用户锁定：合规风险）；派对房间只用异步语音消息 |
 | 固件 BLE 8 特征、菜单 8 功能页、敲击记分、OTA 双分区 | 骨架已接通（代码层），驱动层全部 `TODO(HW)` 占位 |
 | 固件 CO5300 屏驱、QMI8658、 CST9217、AXP2101 电量 | 占位（Serial stub / 假值，实测前不要采信电量） |
 | 素材 | **v0.2 已全量内置**：`app/app/src/main/assets/` 261 个文件、571.1 MB（图片 + 守护宠视频 + 绿幕视频，离线可看；清单 `assets-manifest.json`，打包脚本 `tools/stage_assets.py`）。APK 约 600 MB，CI 改走 GitHub Release 附件（`v0.2-<短 commit>`），artifact 上传会超免费额度 |
@@ -145,8 +148,8 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
 
 - **App：v0.1 已在 GitHub Actions 编出（第 8 跑成功，APK 17 MB，纯骨架无素材）；v0.2 素材全内置（571 MB，APK 约 600 MB），CI 改走 Release 附件——首个 v0.2 构建待本次 push 后验证。** 本机无 JDK/Android SDK，未跑 `./gradlew assembleDebug`；`gradlew` 是占位脚本，需在 Android Studio 里生成标准 Wrapper。
 - **固件：本机无 PlatformIO、无实板，未跑 `pio run` / `pio check`，未烧录**。`platformio.ini` 里的 LCD/触摸/IMU/AXP 引脚是公开资料默认值，未在实板验证；CO5300、QMI8658（敲击阈值 1.8g 需实测调）、CST9217、AXP2101 均未联调。
-- **后端未验证**：短信/微信为 demo 模拟（固定码）；Agora TokenBuilder 未接（无证书）；小模型未接（无服务地址）；月卡支付、PostgreSQL 切换、Alembic 迁移未验证；`app/main.py` 仍用已废弃的 `@app.on_event("startup")`（能用，有 DeprecationWarning）。
-- **端到端未验证**：敲吧唧两下拍照、Agora 入会、房间 IM 真机、高德 debug 包出图、镜头变形/EXIF 方向实拍、OTA 回滚实测。
+- **后端未验证**：短信/微信为 demo 模拟（固定码）；小模型未接（无服务地址）；月卡支付、PostgreSQL 切换、Alembic 迁移未验证；`app/main.py` 仍用已废弃的 `@app.on_event("startup")`（能用，有 DeprecationWarning）。Agora TokenBuilder 已接（`agora-token-builder==1.0.0`，24 测试全过），但真机入会仍待验证。
+- **端到端未验证**：敲吧唧两下拍照、高德真地图（需 release 包，debug 包黑图是预期）、好友双人实时对讲（需登录接通 + 两台真机 + 录音权限）、房间 IM 真机、镜头变形/EXIF 方向实拍、OTA 回滚实测。
 - 后端 `.venv/`（约 110MB）与 `banpai.db` 是本机验证产物，已列入 `.gitignore`，不要提交。
 
 ## 与旧版的口径差异（有意为之）

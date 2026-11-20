@@ -1,7 +1,10 @@
-"""派对房间：Agora 语音 + WebSocket IM（IM 走房间消息接口）。
+"""派对房间：房间管理 + WebSocket IM（IM 走房间消息接口）。
 
-Agora 证书只留服务端：/agora-token 只下发 token，不下发证书；
-未配置 AGORA_APP_ID / 证书时返回占位 token，客户端不得以此真连。
+语音：派对房间只用异步语音消息，不用声网实时语音——公共区域陌生人
+实时语音有合规风险（2026-11-20 用户锁定）。/agora-token 接口仍保留，
+已配置证书时签发真实 token（兼容旧客户端），但 App 不再从派对房间调用它；
+实时对讲只在好友 1:1（好友对讲控件）里用，走 /friends/{id}/space-token。
+Agora 证书只留服务端：token 接口只下发 token，不下发证书。
 """
 import hashlib
 import os
@@ -10,6 +13,7 @@ import time
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.agora_tokens import build_rtc_token
 from app.db import get_db
 from app.models import Room, RoomMember, RoomMessage, User
 from app.schemas import RoomIn, RoomMessageIn, RoomMessageOut, RoomOut
@@ -79,28 +83,26 @@ def leave_room(room_id: int, user: User = Depends(get_current_user), db: Session
 
 @router.get("/rooms/{room_id}/agora-token")
 def agora_token(room_id: int, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    """下发 Agora token 占位：真实 token 需服务端用证书签名生成。
+    """下发 Agora token：已配置证书时用 TokenBuilder 签发真实 token。
 
     未配置证书时返回确定性占位串，仅供联调识别，客户端不要拿它真连 Agora。
+    注意：App 不再从派对房间调用本接口（公共区域不用声网实时语音）；
+    实时对讲只在好友 1:1 里用，走 /friends/{id}/space-token。
     """
     room = db.get(Room, room_id)
     if room is None:
         raise HTTPException(status_code=404, detail="房间不存在")
     if db.query(RoomMember).filter_by(room_id=room_id, user_id=user.id).first() is None:
         raise HTTPException(status_code=403, detail="请先加入房间")
-    app_id = os.environ.get("AGORA_APP_ID", "")
-    cert = os.environ.get("AGORA_APP_CERTIFICATE", "")
-    if not app_id or not cert:
-        digest = hashlib.sha256(f"placeholder:{room_id}:{user.id}".encode()).hexdigest()[:32]
-        return {"app_id": app_id or "placeholder", "token": f"placeholder-{digest}",
-                "channel": f"banpai-room-{room_id}", "uid": user.id,
-                "expires_in": 3600, "placeholder": True}
-    # 已配置证书：此处应使用 Agora 官方 TokenBuilder 签名；
-    # 为避免引入未验证的签名实现，仍返回占位并提示接入 TokenBuilder。
-    return {"app_id": app_id, "token": "GENERATE_WITH_AGORA_TOKEN_BUILDER",
+    real = build_rtc_token(f"banpai-room-{room_id}", user.id)
+    if real is not None:
+        return real
+    digest = hashlib.sha256(f"placeholder:{room_id}:{user.id}".encode()).hexdigest()[:32]
+    return {"app_id": os.environ.get("AGORA_APP_ID", "") or "placeholder",
+            "token": f"placeholder-{digest}",
             "channel": f"banpai-room-{room_id}", "uid": user.id,
             "expires_in": 3600, "placeholder": True,
-            "detail": "服务端已配置证书，需接入 Agora TokenBuilder 生成真实 token"}
+            "detail": "未配置声网证书，返回占位 token，客户端不要真连"}
 
 
 @router.post("/rooms/{room_id}/raise-hand")

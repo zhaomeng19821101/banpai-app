@@ -19,24 +19,26 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.banpai.app.data.BANPAI_EXPRESSIONS
 import com.banpai.app.data.FRIENDS
+import com.banpai.app.data.Friend
 import com.banpai.app.data.PARTY_ROOMS
 import com.banpai.app.ui.media.AssetImage
 
 /**
  * 派对 / 好友页：房间列表 + 好友一对一（房间 / 好友切换）。
- * 语音：Agora 接入点占位（AGORA_APP_ID 在 local.properties）；
- * 按住说话 + 打字键盘切换 + 表情包（半拍 9 格表情真图）。
+ * 语音：派对房间只用异步语音消息（录一段、发过去、对方方便时听），
+ * 不用声网实时语音——公共区域陌生人实时语音有合规风险（2026-11-20 用户锁定）。
+ * 好友 1:1 实时对讲在 FriendChatScreen 的好友对讲控件里（打字 / 语音消息 / 实时对讲）。
  * 吧唧上可直接进房 / 接受好友邀请（BLE 占位，见 BleManager）。
- * 点好友名进 1:1 聊天页（FriendChatScreen：异步语音 + 文字 + 表情）。
+ * 点好友名进 1:1 聊天页。
  */
 @Composable
-fun PartyScreen(onOpenFriendChat: (String) -> Unit = {}) {
+fun PartyScreen(onOpenFriendChat: (Friend) -> Unit = {}) {
     var holdToTalk by remember { mutableStateOf(false) }
     var useKeyboard by remember { mutableStateOf(true) }
     var tab by remember { mutableStateOf("房间") }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        ScreenHeader("派对", "房间列表 · 好友一对一 · Agora 语音占位")
+        ScreenHeader("派对", "房间列表 · 好友一对一 · 异步语音消息")
         Row(modifier = Modifier.fillMaxWidth()) {
             OutlinedButton(onClick = { tab = "房间" }, modifier = Modifier.weight(1f)) { Text("房间") }
             OutlinedButton(onClick = { tab = "好友" }, modifier = Modifier.weight(1f)) { Text("好友") }
@@ -49,7 +51,7 @@ fun PartyScreen(onOpenFriendChat: (String) -> Unit = {}) {
         } else {
             FRIENDS.forEach { friend ->
                 OutlinedButton(
-                    onClick = { onOpenFriendChat(friend.name) },
+                    onClick = { onOpenFriendChat(friend) },
                     modifier = Modifier.fillMaxWidth()
                 ) { Text("和 ${friend.name} 聊天") }
             }
@@ -59,7 +61,7 @@ fun PartyScreen(onOpenFriendChat: (String) -> Unit = {}) {
             OutlinedButton(
                 onClick = { holdToTalk = !holdToTalk },
                 modifier = Modifier.weight(1f)
-            ) { Text(if (holdToTalk) "松开结束说话" else "按住说话（占位）") }
+            ) { Text(if (holdToTalk) "松开发送语音消息" else "按住录语音消息（占位）") }
             OutlinedButton(
                 onClick = { useKeyboard = !useKeyboard },
                 modifier = Modifier.weight(1f)

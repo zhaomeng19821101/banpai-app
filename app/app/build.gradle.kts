@@ -33,6 +33,9 @@ android {
         if (localFile.exists()) localFile.inputStream().use { localProps.load(it) }
         buildConfigField("String", "AMAP_KEY", "\"${localProps.getProperty("AMAP_KEY", "")}\"")
         buildConfigField("String", "AGORA_APP_ID", "\"${localProps.getProperty("AGORA_APP_ID", "")}\"")
+        // 高德 Key 注入 AndroidManifest 的 com.amap.api.v2.apikey；
+        // CI 上无 local.properties 时为空串，探索页只显示占位说明，不创建 MapView。
+        manifestPlaceholders["AMAP_KEY"] = localProps.getProperty("AMAP_KEY", "")
     }
 
     buildTypes {
@@ -98,12 +101,10 @@ dependencies {
     // implementation("androidx.camera:camera-camera2:1.3.4")
     // implementation("androidx.camera:camera-lifecycle:1.3.4")
     // implementation("androidx.camera:camera-view:1.3.4")
-    // 高德地图 SDK 接入点：探索页（ui/screens/ExploreScreen.kt）预留，包名 com.amap.api.maps。
-    // 需在 settings.gradle.kts 追加高德 maven 仓库，并在 local.properties 配 AMAP_KEY。
-    // implementation("com.amap.api:map3d:9.8.0")
-    // implementation("com.amap.api:location:6.4.1")
-    // Agora 语音接入点：派对/好友语音（ui/screens/PartyScreen.kt、ChatScreen.kt）预留。
-    // implementation("io.agora.rtc:full-sdk:4.4.0")
+    // 高德地图 SDK：探索页真地图（MapView）。3D 地图 10.0.600（与旧 67 提交版同款）。
+    implementation("com.amap.api:map3d:10.0.600")
+    // 声网 RTC：只给好友 1:1 实时对讲（好友对讲控件）用；公共区域不用声网实时语音。
+    implementation("io.agora.rtc:full-sdk:4.6.4")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

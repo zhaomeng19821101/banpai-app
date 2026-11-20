@@ -31,6 +31,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.banpai.app.data.FRIENDS
+import com.banpai.app.data.Friend
 import com.banpai.app.ui.screens.AtlasScreen
 import com.banpai.app.ui.screens.CameraScreen
 import com.banpai.app.ui.screens.ChatScreen
@@ -89,7 +91,7 @@ fun BanpaiNavGraph(
     val backStack by navController.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination?.route
     val showBottomBar = currentRoute in MAIN_TABS.map { it.first }
-    var chattingWith by remember { mutableStateOf("好友") }
+    var chattingWith by remember { mutableStateOf(Friend(1, "好友")) }
 
     Scaffold(
         bottomBar = {
@@ -215,14 +217,15 @@ fun BanpaiNavGraph(
             composable(Routes.WATCHFACE) { WatchfaceScreen() }
             composable(Routes.CHAT) { ChatScreen() }
             composable(Routes.PARTY) {
-                PartyScreen(onOpenFriendChat = { name ->
-                    chattingWith = name
+                PartyScreen(onOpenFriendChat = { friend ->
+                    chattingWith = friend
                     navController.navigate(Routes.FRIEND_CHAT)
                 })
             }
             composable(Routes.FRIEND_CHAT) {
                 FriendChatScreen(
-                    friendName = chattingWith,
+                    friendId = chattingWith.id,
+                    friendName = chattingWith.name,
                     onBack = { navController.popBackStack() }
                 )
             }

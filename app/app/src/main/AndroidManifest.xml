@@ -19,18 +19,20 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Banpai">
-        <!-- 高德 Key 占位：无 key 时不初始化地图 SDK，Explore 页显示占位说明。
-             接入时取消注释并填入 BuildConfig.AMAP_KEY（来自 local.properties，勿写死真值）。
+        <!-- 高德 Key：来自 local.properties（manifestPlaceholders 注入），勿写死真值。
+             注意：这个 Key 只登记了 release SHA1，CI 出的 debug 包地图仍会是黑的——
+             这是预期内的；真机验地图要打 release 包，或在高德控制台补登记 debug SHA1。 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="${AMAP_KEY}" />
-        -->
         <activity
             android:name=".MainActivity"
             android:exported="true"

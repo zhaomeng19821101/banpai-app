@@ -12,9 +12,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // 高德 SDK 接入点（占位）：接入 AMap 时在此追加高德 maven 仓库，
-        // 并在 local.properties 配 AMAP_KEY。无 key 时 Explore 页只显示占位说明，不画假地图。
-        // maven { url = uri("https://maven.amap.com/repository") }
+        // 高德地图 SDK：2026-11-20 接入，3D 地图 10.0.600（与旧 67 提交版同款）。
+        maven { url = uri("https://maven.amap.com/repository") }
     }
 }
 rootProject.name = "banpai"
