@@ -101,8 +101,11 @@ dependencies {
     // implementation("androidx.camera:camera-camera2:1.3.4")
     // implementation("androidx.camera:camera-lifecycle:1.3.4")
     // implementation("androidx.camera:camera-view:1.3.4")
-    // 高德地图 SDK：探索页真地图（MapView）。3D 地图 10.0.600（与旧 67 提交版同款）。
-    implementation("com.amap.api:map3d:10.0.600")
+    // 高德地图 SDK：本地内置（官网一键下载包里的合包 JAR，3D 地图 11.3.100 +
+    // 搜索 9.8.1 + 定位 11.3.101；.so 在 src/main/jniLibs）。
+    // 不用远程依赖：高德 maven 仓库（maven.amap.com）在 CI 上连不上
+    // （2026-11-20 run 44695000131：Connect timed out），所以 SDK 直接放仓库里。
+    implementation(files("libs/AMap3DMap_11.3.100_AMapSearch_9.8.1_AMapLocation_11.3.101_20260924.jar"))
     // 声网 RTC：只给好友 1:1 实时对讲（好友对讲控件）用；公共区域不用声网实时语音。
     implementation("io.agora.rtc:full-sdk:4.6.4")
 

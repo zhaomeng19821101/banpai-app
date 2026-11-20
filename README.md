@@ -107,7 +107,7 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
 
 | Key / 配置 | 在哪配 | 没配时会怎样 |
 |---|---|---|
-| `AMAP_KEY` | `app/local.properties`、后端 `.env` | 无 Key 时探索页显示占位说明，不画假地图；后端路线接口返回直线距离占位。**已接通**：3D 地图 SDK 10.0.600 + MapView（2026-11-20）。**注意：Key 只登记了 release SHA1，CI 出的 debug 包地图仍会是黑的**——预期内；真机验地图要打 release 包，或在高德控制台补登记 debug SHA1 |
+| `AMAP_KEY` | `app/local.properties`、后端 `.env` | 无 Key 时探索页显示占位说明，不画假地图；后端路线接口返回直线距离占位。**已接通**：高德 SDK 本地内置（`app/app/libs/` 合包 JAR + `src/main/jniLibs/` .so，3D 地图 11.3.100，官网一键下载包 2026-09-24；因 `maven.amap.com` 在 CI 上连不上，见 run 44695000131）。**注意：Key 只登记了 release SHA1，CI 出的 debug 包地图仍会是黑的**——预期内；真机验地图要打 release 包，或在高德控制台补登记 debug SHA1 |
 | `AGORA_APP_ID` / `AGORA_APP_CERTIFICATE` | App `local.properties` / 后端 `.env`（证书只留服务端） | 未配置时 token 接口返回占位串，语音入会不可用。**范围（2026-11-20 用户锁定）**：公共区域（派对房间 / 公共花园）不用声网实时语音；只给好友 1:1 实时对讲（好友对讲控件）用。**TokenBuilder 已接通**：后端用 `agora-token-builder` 签发真实 006 格式 token（24 个后端测试含 5 个 token 用例，全过） |
 | `SMALL_MODEL_URL` / `SMALL_MODEL_API_KEY` | 后端 `.env` | 花语用本地锁定回答 / “我还小，帮你去打听”口径 |
 | `JWT_SECRET` | 后端 `.env` | 当前为开发占位串，部署前必须换随机长串 |
@@ -136,7 +136,7 @@ pio run -e waveshare-1.75 -t upload --upload-port /dev/ttyUSB0
 |---|---|
 | 后端全部路由 + 能量账本 + 日记种子 + 花语打听口径 | 已接通（本机实测） |
 | App 16 屏导航 + 昼夜三档 + 假数据层 | 已接通（假数据） |
-| App 探索页高德真地图（SDK 10.0.600 + MapView + 24 落点） | 已接通（代码层）；**真机地图待 release 包验证**（Key 只认 release SHA1，debug 包黑图是预期） |
+| App 探索页高德真地图（SDK 本地内置 11.3.100 + MapView + 24 落点） | 已接通（代码层）；**真机地图待 release 包验证**（Key 只认 release SHA1，debug 包黑图是预期） |
 | App 相机 CameraX、BLE 真机、登录短信/微信 | 占位（待 key + 真机） |
 | 声网：好友 1:1 实时对讲（好友对讲控件）+ 后端真实 token 签发 | 已接通（代码层 + 24 测试）；**双人真机对讲待验证**（需登录接通 + 两台真机） |
 | 声网：公共区域（派对房间 / 公共花园）实时语音 | **已取消**（2026-11-20 用户锁定：合规风险）；派对房间只用异步语音消息 |

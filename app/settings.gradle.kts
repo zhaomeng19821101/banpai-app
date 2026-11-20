@@ -12,8 +12,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // 高德地图 SDK：2026-11-20 接入，3D 地图 10.0.600（与旧 67 提交版同款）。
-        maven { url = uri("https://maven.amap.com/repository") }
+        // 高德 maven 仓库不用：maven.amap.com 在 CI 上连不上
+        // （2026-11-20 run 44695000131：Connect timed out），
+        // 高德 SDK 已本地内置（app/app/libs/*.jar + src/main/jniLibs）。
+        // maven { url = uri("https://maven.amap.com/repository") }
     }
 }
 rootProject.name = "banpai"
