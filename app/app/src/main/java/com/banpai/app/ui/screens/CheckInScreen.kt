@@ -31,7 +31,8 @@ import com.banpai.app.ui.media.AssetImage
  * 规则：首次 +80、再访 +20、每点每天 1 次、拍照 +10、乱入 +5/天。
  * 任务线按目的地动态生成（跟着半拍走 X）：目的地定任务名、AMap 步行路线、
  * 沿途站点、AR 问答、到达解锁的守护宠；不在真机上时距离为占位。
- * 敲吧唧两下拍照：BLE TAP 通知 T:shutter 触发快门（见 BleManager / CameraScreen）。
+ * 吧唧拍照键（2026-11-23）：相机页打开后吧唧自动弹出拍照键，点键发 S:press
+ * 触发快门（见 BleManager / CameraScreen）；敲两下拍照已取消，敲击不拍。
  */
 @Composable
 fun CheckInScreen(onOpenCamera: () -> Unit) {
@@ -104,6 +105,6 @@ fun CheckInScreen(onOpenCamera: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
         GoldButton("拍照打卡", onClick = onOpenCamera)
         Spacer(modifier = Modifier.height(8.dp))
-        Text("也可以敲吧唧两下拍照（BLE TAP 占位）。")
+        Text("也可以点吧唧上的拍照键拍照（相机页打开后自动弹出）。")
     }
 }

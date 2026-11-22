@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,9 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.banpai.app.data.BadgeCameraLink
 import com.banpai.app.data.CAMERA_EXPRESSIONS
 import com.banpai.app.data.CAMERA_STYLE_BASE
 import com.banpai.app.data.Cameo
+import com.banpai.app.data.StubBadgeCameraLink
 import com.banpai.app.data.cameraStyleAsset
 import com.banpai.app.data.frameHorizontalAsset
 import com.banpai.app.data.frameVerticalAsset
@@ -40,20 +43,47 @@ import com.banpai.app.ui.media.AssetVideo
  * 8 种大师级风格（精品策展，非冷暖滤镜）、40 相框（20 横 + 20 竖，边框分类里挑，
  * 不堆一堆让用户翻）、6 表情库 + 5 半身像框样张都是真图。
  * 录像也支持乱入。HDR / 美颜占位。
- * 敲吧唧两下拍照：BLE TAP 通知 T:shutter 到达后触发快门（见 BleManager）。
+ * 吧唧拍照键（2026-11-23，Jackson 定，替代敲两下快门）：进相机页调
+ * BadgeCameraLink.onCameraOpened() 写 M:camera，吧唧自动弹出拍照键；点键发
+ * S:press（CAMERA b109）→ 本页 onShutterPressed 回调执行拍照（CameraX 接入后），
+ * 拍照成功再调 notifyPhotoTaken() 写 S:done，吧唧显示“已拍照”；离页调
+ * onCameraClosed() 写 M:normal。拍照模式下敲击不拍。T:shutter 已废弃。
  * 注意：绿幕抠像（chroma-key）叠加到取景画面是下一步；现在乱入视频在取景框里循环预览。
  */
 private val CAMERA_STYLES = listOf("冰城纪实", "雪夜电影", "暖阳人像", "丁香春日", "老街黑白", "黄金时刻", "冰灯夜游", "1998 拍立得")
 private val CAMERA_SIZES = listOf("1:1", "4:3", "16:9", "3:4", "9:16")
 
 @Composable
-fun CameraScreen() {
+fun CameraScreen(
+    badgeCameraLink: BadgeCameraLink? = null
+) {
+    // 未传链路时用占位实现（只记调用，不真连 BLE；真机联调时从上层注入真实现）。
+    val link = badgeCameraLink ?: remember { StubBadgeCameraLink() }
     var style by remember { mutableStateOf(CAMERA_STYLES[0]) }
     var size by remember { mutableStateOf(CAMERA_SIZES[0]) }
     var cameoOn by remember { mutableStateOf(true) }
     var cameo by remember { mutableStateOf(Cameo.PEEK) }
     var frameV by remember { mutableStateOf(1) }
     var frameH by remember { mutableStateOf(1) }
+    // 吧唧拍照键按下的次数（占位计数；CameraX 接入后这里改为真正执行拍照）。
+    var badgeShutterCount by remember { mutableStateOf(0) }
+
+    // 进相机页 → 通知吧唧弹出拍照键（M:camera）；离页 → M:normal。
+    // 吧唧点拍照键（S:press）→ 执行拍照；拍照成功后必须调
+    // link.notifyPhotoTaken() 写 S:done，吧唧才显示“已拍照”——现在 CameraX
+    // 还没接进来，没有真正拍成照片，所以这里只计数、不回执（不骗吧唧）。
+    DisposableEffect(link) {
+        link.onShutterPressed = {
+            badgeShutterCount++
+            // TODO CameraX 接入后：在此调 takePicture()，成功回调里调
+            // link.notifyPhotoTaken()；失败不调。
+        }
+        link.onCameraOpened()
+        onDispose {
+            link.onShutterPressed = null
+            link.onCameraClosed()
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
@@ -154,6 +184,6 @@ fun CameraScreen() {
         Spacer(modifier = Modifier.height(8.dp))
         Text("录像也支持乱入。HDR / 美颜占位。")
         GoldButton("拍照", onClick = { /* TODO CameraX takePicture */ })
-        GoldButton("敲吧唧两下也能拍（BLE TAP 占位）", onClick = { /* TODO BleManager 订阅 T:shutter */ })
+        Text("吧唧拍照键：手机打开相机后吧唧自动弹出拍照键，点键拍照（已收到 $badgeShutterCount 次；CameraX 接入后执行拍照，成功后回执吧唧显示“已拍照”）。敲击不拍。")
     }
 }
