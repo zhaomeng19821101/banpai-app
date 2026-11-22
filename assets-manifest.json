@@ -31,6 +31,61 @@
    "bytes": 605212
   },
   {
+   "src": "/home/hatch/workspace/banpai/assets/food/32-地三鲜.webp",
+   "dst": "food/06.webp",
+   "bytes": 574920
+  },
+  {
+   "src": "/home/hatch/workspace/banpai/assets/food/07-俄式西餐.webp",
+   "dst": "food/12.webp",
+   "bytes": 279134
+  },
+  {
+   "src": "/home/hatch/workspace/banpai/assets/food/34-扒鸡.webp",
+   "dst": "food/14.webp",
+   "bytes": 285372
+  },
+  {
+   "src": "/home/hatch/workspace/banpai/assets/food/35-酸菜白肉血肠.webp",
+   "dst": "food/16.webp",
+   "bytes": 511400
+  },
+  {
+   "src": "/home/hatch/workspace/banpai/assets/food/37-烤冷面.webp",
+   "dst": "food/20.webp",
+   "bytes": 616618
+  },
+  {
+   "src": "/home/hatch/workspace/banpai/assets/food/38-拉面.webp",
+   "dst": "food/23.webp",
+   "bytes": 382762
+  },
+  {
+   "src": "/home/hatch/workspace/banpai/assets/food/39-朝鲜冷面.webp",
+   "dst": "food/24.webp",
+   "bytes": 427650
+  },
+  {
+   "src": "/home/hatch/workspace/banpai/assets/food/40-粘玉米.webp",
+   "dst": "food/25.webp",
+   "bytes": 436630
+  },
+  {
+   "src": "/home/hatch/workspace/banpai/assets/food/41-蓝莓.webp",
+   "dst": "food/26.webp",
+   "bytes": 375338
+  },
+  {
+   "src": "/home/hatch/workspace/banpai/assets/food/42-榛子.webp",
+   "dst": "food/27.webp",
+   "bytes": 725024
+  },
+  {
+   "src": "/home/hatch/workspace/banpai/assets/food/43-豆腐脑.webp",
+   "dst": "food/30.webp",
+   "bytes": 420736
+  },
+  {
    "dst": "intro/01.webp",
    "src": "/home/hatch/workspace/banpai/assets/intro-cards/media-generation-banpai-intro-1-hello-0-37213a4c-4c7b-4976-bd51-224265643b4f.webp",
    "bytes": 643426
@@ -592,8 +647,8 @@
   },
   {
    "dst": "food/11.webp",
-   "src": "/home/hatch/workspace/banpai/assets/food/07-俄式西餐.webp",
-   "bytes": 279134
+   "src": "/home/hatch/workspace/banpai/assets/food/33-俄式罐焖牛肉.webp",
+   "bytes": 356922
   },
   {
    "dst": "food/13.webp",
@@ -617,8 +672,8 @@
   },
   {
    "dst": "food/19.webp",
-   "src": "/home/hatch/workspace/banpai/assets/food/12-冻梨冻柿子.webp",
-   "bytes": 469820
+   "src": "/home/hatch/workspace/banpai/assets/food/36-冻柿子.webp",
+   "bytes": 663924
   },
   {
    "dst": "food/21.webp",
@@ -632,13 +687,13 @@
   },
   {
    "dst": "food/28.webp",
-   "src": "/home/hatch/workspace/banpai/assets/food/29-小肚.webp",
-   "bytes": 608164
+   "src": "/home/hatch/workspace/banpai/assets/food/45-松仁小肚.webp",
+   "bytes": 361990
   },
   {
    "dst": "food/29.webp",
-   "src": "/home/hatch/workspace/banpai/assets/food/20-老道外手撕鸡.webp",
-   "bytes": 296934
+   "src": "/home/hatch/workspace/banpai/assets/food/44-熏鸡.webp",
+   "bytes": 603736
   },
   {
    "dst": "food/31.webp",

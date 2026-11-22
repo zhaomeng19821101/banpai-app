@@ -6,9 +6,8 @@ package com.banpai.app.data
  * （见根目录 assets-manifest.json）；编号与 FakeRepository 的 id 一一对应。
  *
  * 四瓣红线：半拍主图已目检——标准图正好 4 瓣，金瓣隐藏款正好 5 瓣（一金 + 四冰紫）。
- * 食物 11 种在素材库里没有对应图（地三鲜、红菜汤、扒鸡、酸菜白肉血肠、
- * 烤冷面、拉面、朝鲜冷面、粘玉米、蓝莓、榛子、豆腐脑），foodAsset() 对它们返回 null，
- * 卡片保持纯文字，不硬塞错图。
+ * 食物 31 种全部有图（2026-11-22 补齐：11 张缺图 + 冻柿子独立图 +
+ * 俄式罐焖牛肉、松仁小肚、熏鸡重画），foodAsset() 对 1–31 号一律返回文件路径。
  */
 
 // ---------- 半拍主图 / 欢迎 / 彩蛋 ----------
@@ -34,10 +33,11 @@ fun outfitAsset(id: Int): String = "outfits/%02d.webp".format(id)
 fun guardianCardAsset(index0to23: Int): String = "guardian-cards/%02d.webp".format(index0to23 + 1)
 fun guardianVideoAsset(index0to23: Int): String = "guardian-videos/%02d.mp4".format(index0to23 + 1)
 
-// ---------- 食物（12 种无图，返回 null） ----------
+// ---------- 食物（31 种全部有图） ----------
 // staged 文件名就是食物 id：food/01.webp = 食物 1 号马迭尔冰棍，以此类推。
 private val FOOD_WITH_IMAGE = setOf(
-    1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 15, 17, 18, 19, 21, 22, 28, 29, 31
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
 )
 
 fun foodAsset(foodId: Int): String? =
