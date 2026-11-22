@@ -19,6 +19,11 @@ const char* kKeyDialHash = "dialhash";
 const char* kKeyGoldUnlocked = "gold";
 const char* kKeyTapSeq = "tapseq";
 const char* kKeySerial = "serial";
+const char* kKeyBrightness = "brt";
+const char* kKeyVolume = "vol";
+const char* kKeyBestBell = "bbell";
+const char* kKeyBestIce = "bice";
+const char* kKeyBestStick = "bstick";
 
 const char* kWallpaperPath = "/wallpaper.bin";
 const char* kDialPath = "/dial.bin";
@@ -86,6 +91,42 @@ uint32_t nextTapSeq() {
 }
 
 String getSerial() { return prefs.getString(kKeySerial, ""); }
+
+uint8_t getBrightness() {
+  uint8_t v = getU8(kKeyBrightness, 80);
+  return v > 100 ? 80 : v;
+}
+
+void setBrightness(uint8_t v) {
+  prefs.putUChar(kKeyBrightness, v > 100 ? 100 : v);
+}
+
+uint8_t getVolume() {
+  uint8_t v = getU8(kKeyVolume, 70);
+  return v > 100 ? 70 : v;
+}
+
+void setVolume(uint8_t v) {
+  prefs.putUChar(kKeyVolume, v > 100 ? 100 : v);
+}
+
+static const char* bestKey(int gameId) {
+  if (gameId == 2) return kKeyBestIce;
+  if (gameId == 3) return kKeyBestStick;
+  return kKeyBestBell;  // 1 = bell, default
+}
+
+int getBestScore(int gameId) {
+  if (gameId < 1 || gameId > 3) return 0;
+  return (int)prefs.getUInt(bestKey(gameId), 0);
+}
+
+void setBestScore(int gameId, int score) {
+  if (gameId < 1 || gameId > 3 || score <= 0) return;
+  const char* key = bestKey(gameId);
+  uint32_t cur = prefs.getUInt(key, 0);
+  if ((uint32_t)score > cur) prefs.putUInt(key, (uint32_t)score);
+}
 
 // --- single-slot bitmap writes: truncate the same file, then write. ----
 static bool saveSlot(const char* path, const uint8_t* data, size_t len) {

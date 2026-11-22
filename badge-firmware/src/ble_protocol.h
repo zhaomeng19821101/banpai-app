@@ -34,7 +34,7 @@
 
 #define BANPAI_DEVICE_NAME "Banpai-Badge"
 #define BANPAI_MODEL       "waveshare-1.75"
-#define BANPAI_FW_VERSION_STR "0.1.0-scaffold"
+#define BANPAI_FW_VERSION_STR "0.2.0-ui"
 
 namespace bleproto {
 

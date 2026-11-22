@@ -1,4 +1,4 @@
-// main.cpp — 半拍 Banpai badge firmware (scaffold v0.1.0).
+// main.cpp — 半拍 Banpai badge firmware (UI v0.2.0).
 // PlatformIO + ESP32-S3 Arduino core. Target: Waveshare
 // ESP32-S3-Touch-AMOLED-1.75 (466x466 round CO5300 QSPI AMOLED,
 // CST9217 touch, QMI8658 IMU, AXP2101 power).
@@ -385,10 +385,17 @@ static void pollImuKnock() {
 
 // ----------------------------------------------------------------- touch
 // TODO(HW): bind the real CST9217 driver. Touch is BEST-EFFORT ONLY:
-// a tap advances the menu exactly like a single knock, and touch is
-// never used for scoring, shutter, password entry confirmation, or
-// any other critical action (touch reads are unstable).
+// a tap opens the menu from the dial home (design: "点表盘开菜单") and
+// advances elsewhere, exactly like a single knock; touch is never used
+// for scoring, shutter, password entry confirmation, or any other
+// critical action (touch reads are unstable).
 static bool pollTouchTap() {
+  return false;  // stub: no touch event. Replace with CST9217 readout.
+}
+
+// Long-press (1 s) on the touch panel = back one level. Best-effort
+// only, same as the tap above.
+static bool pollTouchLongPress() {
   return false;  // stub: no touch event. Replace with CST9217 readout.
 }
 
@@ -396,7 +403,9 @@ static bool pollTouchTap() {
 // Settings > Wi-Fi: scan 2.4 GHz networks and show them. Password is
 // typed on the badge (ASCII on-screen keyboard, see menu.cpp).
 // Wi-Fi is used for OTA-from-cloud / wallpaper fetch fallback only;
-// BLE is the primary phone link.
+// BLE is the primary phone link. The connect itself runs here (async):
+// the menu asks (wifiConnectRequested), main runs WiFi.begin() and
+// reports the result back via setWifiConnectResult().
 static void wifiScanAndShow() {
   int n = WiFi.scanNetworks(false);
   String ssids[16];
@@ -405,6 +414,39 @@ static void wifiScanAndShow() {
     ssids[count++] = WiFi.SSID(i);
   }
   g_menu.setWifiNetworks(ssids, count);
+}
+
+static uint32_t g_wifiConnectStartMs = 0;
+static bool g_wifiConnecting = false;
+static String g_wifiConnectingSsid;
+
+static void wifiConnectKick() {
+  String ssid = g_menu.wifiConnectSsid();
+  String pass = g_menu.wifiConnectPassword();
+  g_menu.clearWifiConnectRequest();
+  if (ssid.length() == 0) {
+    g_menu.setWifiConnectResult(false, ssid);
+    return;
+  }
+  WiFi.begin(ssid.c_str(), pass.c_str());
+  g_wifiConnectingSsid = ssid;
+  g_wifiConnectStartMs = millis();
+  g_wifiConnecting = true;
+}
+
+static void wifiConnectPoll(uint32_t nowMs) {
+  if (!g_wifiConnecting) return;
+  if (WiFi.status() == WL_CONNECTED) {
+    g_wifiConnecting = false;
+    g_menu.setWifiConnectResult(true, g_wifiConnectingSsid);
+    return;
+  }
+  if (nowMs - g_wifiConnectStartMs > 10000) {
+    // 10 s timeout: stop trying, report failure, stay on BLE.
+    g_wifiConnecting = false;
+    WiFi.disconnect(true);
+    g_menu.setWifiConnectResult(false, g_wifiConnectingSsid);
+  }
 }
 
 // ------------------------------------------------------------------ setup
@@ -446,9 +488,17 @@ void loop() {
 
   pollImuKnock();
   if (pollTouchTap()) {
-    g_menu.nextItem();
+    g_menu.tap();
     g_menu.render(display);
   }
+  if (pollTouchLongPress()) {
+    g_menu.back();
+    g_menu.render(display);
+  }
+
+  // Wi-Fi password confirmed on the badge -> run the connect async.
+  if (g_menu.wifiConnectRequested()) wifiConnectKick();
+  wifiConnectPoll(nowMs);
 
   // Entering the Wi-Fi page triggers a fresh scan.
   if (g_menu.page() == menu::Page::WIFI && lastWifiPage != menu::Page::WIFI) {

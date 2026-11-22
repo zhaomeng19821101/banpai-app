@@ -36,6 +36,11 @@ extern const char* kKeyDialHash;      // string: sha/crc of stored dial bitmap
 extern const char* kKeyGoldUnlocked;  // bool:   easter egg unlocked (dial 24)
 extern const char* kKeyTapSeq;        // uint32: TAP notify sequence
 extern const char* kKeySerial;        // string: device serial (set once)
+extern const char* kKeyBrightness;    // uint8:  brightness 0..100 (UI setting)
+extern const char* kKeyVolume;        // uint8:  volume 0..100 (UI setting)
+extern const char* kKeyBestBell;      // uint32: best score, 敲钟
+extern const char* kKeyBestIce;       // uint32: best score, 凿冰
+extern const char* kKeyBestStick;     // uint32: best score, 咬冰棍
 
 extern const char* kWallpaperPath;    // "/wallpaper.bin" — the ONE slot
 extern const char* kDialPath;         // "/dial.bin"      — the ONE slot
@@ -54,6 +59,12 @@ bool getGoldUnlocked();
 void setGoldUnlocked(bool v);       // set ONLY via the easter-egg letter flow
 uint32_t nextTapSeq();              // increments + persists the TAP sequence
 String getSerial();                 // generated once, then stable
+uint8_t getBrightness();            // default 80 (UI setting, badge-local)
+void setBrightness(uint8_t v);      // clamps 0..100
+uint8_t getVolume();                // default 70 (UI setting, badge-local)
+void setVolume(uint8_t v);          // clamps 0..100
+int getBestScore(int gameId);       // 1 bell / 2 ice / 3 stick, default 0
+void setBestScore(int gameId, int score);  // only stores improvements
 
 // --- single-slot bitmaps (LittleFS, overwrite-in-place) -----------------
 // Each write truncates the slot file first: new overwrites old, no
