@@ -126,7 +126,10 @@ String buildScore(const ScoreFrame& f) {
   return s;
 }
 
-// "T:<kind>|<timestamp>|<seq>"  kind: tap | knock | shutter
+// "T:<kind>|<timestamp>|<seq>"  kind: tap | knock
+// ("shutter" is still encoded if a SHUTTER value is ever passed, for
+// wire compatibility with old App builds — but nothing emits it any
+// more; see TapKind in ble_protocol.h.)
 String buildTapNotify(TapKind kind, uint32_t timestamp, uint32_t seq) {
   const char* k = "tap";
   if (kind == TapKind::KNOCK) k = "knock";
@@ -158,6 +161,28 @@ String buildInfoJson(int battPercent, bool charging, const String& serial) {
   return s;
 }
 
+// "S:press|<timestamp>|<seq>"  (CAMERA b109, badge -> App)
+String buildShutterPress(uint32_t timestamp, uint32_t seq) {
+  String s = "S:press|";
+  s += String(timestamp);
+  s += "|";
+  s += String(seq);
+  return s;
+}
+
+// "S:done" | "S:done|<timestamp>"  (CAMERA b109, App -> badge)
+bool parseShutterDone(const String& payload, uint32_t* timestampOut) {
+  if (payload == "S:done") {
+    if (timestampOut) *timestampOut = 0;
+    return true;
+  }
+  if (!payload.startsWith("S:done|")) return false;
+  String ts = payload.substring(7);
+  if (!isDigits(ts)) return false;
+  if (timestampOut) *timestampOut = (uint32_t)strtoul(ts.c_str(), nullptr, 10);
+  return true;
+}
+
 String buildOtaStatus(const char* status, const char* detail) {
   String s = "OTA:";
   s += status;
@@ -169,7 +194,10 @@ String buildOtaStatus(const char* status, const char* detail) {
 }
 
 TapKind classifyKnock(bool doubleKnock, TapMode mode) {
-  if (doubleKnock && mode == TapMode::CAMERA) return TapKind::SHUTTER;
+  // 2026-11-23 (Jackson): double-knock is NEVER a shutter any more.
+  // Photo moved to the on-screen photo button (CAMERA b109). The mode
+  // is ignored; a double knock is a knock in every mode.
+  (void)mode;
   if (doubleKnock) return TapKind::KNOCK;
   return TapKind::TAP;
 }

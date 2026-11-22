@@ -5,6 +5,14 @@
 //   HOME      dial home (time layer per dial anchor + 5 clock styles)
 //             Single knock cycles 3 info pages: time -> steps/energy/
 //             lit -> next station. Double-knock / tap opens the menu.
+//   CAMERA_SHUTTER  拍照键页 (2026-11-23, Jackson: replaces the old
+//             double-knock shutter): auto-opens when the App writes
+//             "M:camera" (b106). Big round photo button in the centre
+//             of the 466 round safe area; tapping the button sends
+//             "S:press" on CAMERA (b109); the App answers "S:done"
+//             and the page shows "PHOTO TAKEN". Knocks do NOTHING on
+//             this page (anti-misfire: only the button takes a photo).
+//             "M:normal" (or back) returns to the page that was open.
 //   MENU      function list (11 rows): voice, garden, friends, party,
 //             games, photos, check-in, settings, notifications,
 //             find phone, steps/energy. Single knock = next row,
@@ -43,10 +51,17 @@
 // Navigation (touch CST9217 reads unstably — it must NEVER be the only
 // path for a critical action):
 //   - single knock ........... next item / advance (HOME: next info page)
-//   - double knock ........... confirm / enter (in camera mode this is
-//                              the shutter instead — see main.cpp)
+//   - double knock ........... confirm / enter (NEVER a shutter any
+//                              more — 2026-11-23: photo moved to the
+//                              on-screen photo button, see
+//                              Page::CAMERA_SHUTTER)
 //   - touch tap .............. best-effort shortcut: HOME -> menu,
-//                              otherwise same as single knock
+//                              otherwise same as single knock; on the
+//                              photo-button page a tap presses the
+//                              button (the photo exception, 2026-11-23:
+//                              the button fills the page centre, and
+//                              touchAt(x, y) hit-tests it precisely
+//                              once the CST9217 driver is bound)
 //   - long-press (touch) ..... back one level (best-effort; knock has
 //                              no hold, so no knock fallback exists)
 // All labels on the badge are ASCII (built-in font is ASCII-only);
@@ -93,6 +108,7 @@ enum class Page : uint8_t {
   WIFI_PASS = 10, // Wi-Fi 密码输入（屏上键盘，敲击导航备用）
   GAMES = 11,  // 小游戏列表
   GAME_PLAY = 12,  // 小游戏进行中（敲钟/凿冰/咬冰棍）
+  CAMERA_SHUTTER = 13,  // 拍照键页（2026-11-23：点屏幕拍照键拍照）
 };
 
 // Menu order (rows on the MENU list page, in design order).
@@ -167,10 +183,28 @@ class Menu {
   void enterMenu();            // HOME -> MENU list page
   void nextItem();             // single knock: advance (HOME: info page)
   void tap();                  // touch tap: HOME -> menu, else nextItem
+  void touchAt(int x, int y);  // touch tap with coordinates: on the
+                               // photo-button page hit-tests the button,
+                               // everywhere else same as tap()
   void confirm();              // double knock: enter / select / action
   void back();                 // back one level (never past HOME)
   void tick(uint32_t nowMs);   // per-page timers (game timeout etc.)
   void render(IDisplay& d);
+
+  // Photo-button page (2026-11-23, Jackson). enterCameraPage() saves
+  // the current page and auto-opens the photo button; exitCameraPage()
+  // returns to the saved page. Both are no-ops when not applicable.
+  void enterCameraPage();
+  void exitCameraPage();
+  // Press the on-screen photo button. Only works on the photo-button
+  // page; returns false anywhere else. Sets the pending shutter flag
+  // for main.cpp to notify "S:press" on CAMERA (b109).
+  bool pressShutterButton();
+  // Consume the pending shutter flag (true once per button press).
+  bool takeShutterPress();
+  // App answered "S:done" on CAMERA (b109): show "PHOTO TAKEN".
+  void setPhotoTaken(bool taken);
+  bool photoTaken() const { return photoTaken_; }
 
   // Page-specific actions (called by confirm() or by main.cpp events).
   void selectGame(game::GameId id);
@@ -207,6 +241,11 @@ class Menu {
   UiState ui_;
   String wifiSsids_[16];
   int wifiCount_ = 0;
+  // Photo-button page state (2026-11-23).
+  Page returnPage_ = Page::HOME;  // page open before the camera popped up
+  bool shutterPressed_ = false;   // pending "S:press" for main.cpp
+  bool photoTaken_ = false;       // "S:done" received, show confirmation
+  uint32_t photoTakenMs_ = 0;     // millis() when "S:done" arrived
   // Wi-Fi password keyboard state.
   bool wifiConnectRequested_ = false;
   String wifiConnectSsid_;
@@ -227,6 +266,7 @@ class Menu {
   void renderWifiPass(IDisplay& d);
   void renderGames(IDisplay& d);
   void renderGamePlay(IDisplay& d);
+  void renderCameraShutter(IDisplay& d);
   void renderHeader(IDisplay& d, const char* titleEn);
   void renderFooterHint(IDisplay& d, const char* hintEn);
   void centerText(IDisplay& d, int y, const String& s, uint16_t color, int size);

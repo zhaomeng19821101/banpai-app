@@ -69,6 +69,45 @@ void Menu::begin() {
   ui_.volume = storage::getVolume();
 }
 
+void Menu::enterCameraPage() {
+  // Auto-popup when the App opens its camera ("M:camera", b106).
+  // Already on the photo page: keep the saved return page.
+  if (page_ == Page::CAMERA_SHUTTER) return;
+  returnPage_ = page_;
+  photoTaken_ = false;
+  shutterPressed_ = false;
+  page_ = Page::CAMERA_SHUTTER;
+}
+
+void Menu::exitCameraPage() {
+  // Camera closed ("M:normal", b106) or back: return to the page
+  // that was open before the camera popped up.
+  if (page_ != Page::CAMERA_SHUTTER) return;
+  photoTaken_ = false;
+  shutterPressed_ = false;
+  page_ = returnPage_;
+}
+
+bool Menu::pressShutterButton() {
+  // The ONLY way to take a photo from the badge (2026-11-23).
+  // Knocks never reach here.
+  if (page_ != Page::CAMERA_SHUTTER) return false;
+  shutterPressed_ = true;
+  photoTaken_ = false;  // clear the old confirmation until "S:done"
+  return true;
+}
+
+bool Menu::takeShutterPress() {
+  if (!shutterPressed_) return false;
+  shutterPressed_ = false;
+  return true;
+}
+
+void Menu::setPhotoTaken(bool taken) {
+  photoTaken_ = taken;
+  photoTakenMs_ = millis();
+}
+
 void Menu::goHome() {
   if (session_.active()) session_.end();
   page_ = Page::HOME;
@@ -108,17 +147,41 @@ void Menu::nextItem() {
     case Page::GAME_PLAY:
       if (!session_.active()) startGame(1);  // ready screen: tap to start
       break;
+    case Page::CAMERA_SHUTTER:
+      // Photo mode: knocks do NOTHING (anti-misfire — only the
+      // on-screen photo button takes a photo, 2026-11-23).
+      break;
   }
 }
 
 void Menu::tap() {
   // Touch tap: on the dial it opens the menu (design: "点表盘开菜单");
+  // on the photo-button page it presses the big button (the button
+  // fills the page centre — the photo exception, 2026-11-23);
   // everywhere else it is the same best-effort shortcut as a knock.
   if (page_ == Page::HOME) {
     enterMenu();
     return;
   }
+  if (page_ == Page::CAMERA_SHUTTER) {
+    pressShutterButton();
+    return;
+  }
   nextItem();
+}
+
+void Menu::touchAt(int x, int y) {
+  // Touch tap with coordinates (real CST9217 driver path). On the
+  // photo-button page only a tap inside the big button takes a photo;
+  // a tap elsewhere on the page does nothing. Everywhere else this
+  // is the same best-effort shortcut as tap().
+  if (page_ == Page::CAMERA_SHUTTER) {
+    int dx = x - BANPAI_SCREEN_CX;
+    int dy = y - BANPAI_SCREEN_CY;
+    if (dx * dx + dy * dy <= 110 * 110) pressShutterButton();
+    return;
+  }
+  tap();
 }
 
 void Menu::confirm() {
@@ -244,12 +307,18 @@ void Menu::confirm() {
     case Page::GAME_PLAY:
       if (!session_.active()) startGame(1);
       break;
+    case Page::CAMERA_SHUTTER:
+      // Double-knock on the photo page does NOTHING: it is not a
+      // shutter any more (2026-11-23) and must not navigate away
+      // while the phone camera is open.
+      break;
     default:
       break;
   }
 }
 
 void Menu::back() {
+  if (page_ == Page::CAMERA_SHUTTER) { exitCameraPage(); return; }
   if (page_ == Page::WIFI_PASS) { page_ = Page::WIFI; return; }
   if (page_ == Page::WIFI) { page_ = Page::SETTINGS; return; }
   if (page_ == Page::GAME_PLAY) {
@@ -264,6 +333,10 @@ void Menu::back() {
 void Menu::tick(uint32_t nowMs) {
   if (ui_.voiceSentFlash && nowMs - voiceSentMs_ > 3000) {
     ui_.voiceSentFlash = false;
+  }
+  // "PHOTO TAKEN" confirmation clears after 5 s (button stays live).
+  if (photoTaken_ && nowMs - photoTakenMs_ > 5000) {
+    photoTaken_ = false;
   }
   if (ui_.voicePlaying && nowMs - voicePlayMs_ > 8000) {
     ui_.voicePlaying = false;
@@ -331,6 +404,7 @@ void Menu::render(IDisplay& d) {
     case Page::WIFI_PASS: renderWifiPass(d); break;
     case Page::GAMES: renderGames(d); break;
     case Page::GAME_PLAY: renderGamePlay(d); break;
+    case Page::CAMERA_SHUTTER: renderCameraShutter(d); break;
   }
 }
 
@@ -759,6 +833,25 @@ void Menu::renderGamePlay(IDisplay& d) {
                BANPAI_LILAC, 1);
   }
   renderFooterHint(d, "KNOCK: SCORE  BACK: END + SEND");
+}
+
+void Menu::renderCameraShutter(IDisplay& d) {
+  // 拍照键页 (2026-11-23, Jackson): big round photo button centred
+  // in the 466 round safe area (centre 233,233, r=110 — well inside
+  // the r=227 safe circle). Gold disc + dark inner disc + gold core,
+  // like a camera shutter button. All labels ASCII (built-in font).
+  d.clear(BANPAI_NIGHT);
+  renderHeader(d, "CAMERA");
+  d.fillCircle(BANPAI_SCREEN_CX, BANPAI_SCREEN_CY, 110, BANPAI_GOLD);
+  d.fillCircle(BANPAI_SCREEN_CX, BANPAI_SCREEN_CY, 88, BANPAI_NIGHT);
+  d.fillCircle(BANPAI_SCREEN_CX, BANPAI_SCREEN_CY, 30, BANPAI_GOLD);
+  if (photoTaken_) {
+    centerText(d, 362, "PHOTO TAKEN!", BANPAI_GOLD, 2);
+  } else {
+    centerText(d, 362, "TAP THE BUTTON", BANPAI_SNOW_WHITE, 1);
+  }
+  centerText(d, 386, "PHONE TAKES THE PHOTO", BANPAI_LILAC, 1);
+  renderFooterHint(d, "KNOCK DOES NOT TAKE PHOTO");
 }
 
 } // namespace menu

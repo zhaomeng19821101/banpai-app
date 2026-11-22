@@ -12,9 +12,14 @@
 //   - Dial is the home page; menu is one function per page.
 //   - BLE service/characteristics exactly as ble_protocol.h.
 //   - Knock detection uses the IMU (QMI8658). CST9217 touch reads are
-//     unstable and are NEVER used for scoring, shutter, or any
-//     critical action — touch is a best-effort shortcut only.
-//   - Double-knock in camera mode == photo shutter (TAP b106).
+//     unstable and are NEVER used for scoring or any critical action
+//     — touch is a best-effort shortcut only. THE ONE EXCEPTION
+//     (2026-11-23, Jackson): the photo button. Photo moved off the
+//     knock gesture onto an on-screen button: when the phone opens
+//     its camera ("M:camera", b106) the badge auto-opens the photo
+//     page, tapping the big button sends "S:press" (CAMERA b109),
+//     and knocks NEVER take a photo — in photo mode a knock does
+//     nothing at all.
 //   - Single-slot storage: 1 wallpaper + 1 dial (storage.h).
 //   - OTA: dual app partitions + auto-rollback placeholder.
 //   - No music playback on the badge (speaker quality is poor).
@@ -106,6 +111,7 @@ static NimBLECharacteristic* g_chrScore = nullptr;
 static NimBLECharacteristic* g_chrTap = nullptr;
 static NimBLECharacteristic* g_chrInfo = nullptr;
 static NimBLECharacteristic* g_chrOta = nullptr;
+static NimBLECharacteristic* g_chrCamera = nullptr;
 
 static uint32_t nowUnix() {
   if (!g_timeSynced) return 0;
@@ -125,6 +131,15 @@ static void notifyTap(bleproto::TapKind kind) {
   String payload = bleproto::buildTapNotify(kind, nowUnix(), storage::nextTapSeq());
   g_chrTap->setValue(payload.c_str());
   g_chrTap->notify();
+}
+
+// Photo button pressed on the badge -> "S:press" on CAMERA (b109).
+// The App takes the photo and answers "S:done" on the same char.
+static void notifyShutterPress() {
+  if (!g_bleConnected || !g_chrCamera) return;
+  String payload = bleproto::buildShutterPress(nowUnix(), storage::nextTapSeq());
+  g_chrCamera->setValue(payload.c_str());
+  g_chrCamera->notify();
 }
 
 static void notifyScore() {
@@ -241,6 +256,25 @@ class ChrCallbacks : public NimBLECharacteristicCallbacks {
       if (bleproto::parseTapMode(payload, m)) {
         g_tapMode = m;
         storage::setTapMode(m == bleproto::TapMode::CAMERA ? 1 : 0);
+        // Camera open/close (2026-11-23): "M:camera" auto-opens the
+        // photo-button page (saving the current page); "M:normal"
+        // returns to it. TapMode itself is only the mode value.
+        if (m == bleproto::TapMode::CAMERA) {
+          g_menu.enterCameraPage();
+        } else {
+          g_menu.exitCameraPage();
+        }
+        g_menu.render(display);
+      }
+      return;
+    }
+    if (uuid == BANPAI_CHR_CAMERA) {
+      // App -> badge photo-taken ack: "S:done" — show "PHOTO TAKEN".
+      uint32_t ts = 0;
+      if (bleproto::parseShutterDone(payload, &ts)) {
+        (void)ts;
+        g_menu.setPhotoTaken(true);
+        g_menu.render(display);
       }
       return;
     }
@@ -313,6 +347,10 @@ static void bleSetup() {
                                         NIMBLE_PROPERTY::NOTIFY);
   g_chrInfo = addChr(BANPAI_CHR_INFO, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::NOTIFY);
   addChr(BANPAI_CHR_TIME, NIMBLE_PROPERTY::WRITE);
+  // CAMERA b109 (2026-11-23): badge notifies "S:press", App writes
+  // "S:done". Open/close still rides on TAP b106 "M:camera"/"M:normal".
+  g_chrCamera = addChr(BANPAI_CHR_CAMERA, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE |
+                                              NIMBLE_PROPERTY::NOTIFY);
 
   svc->start();
   NimBLEAdvertising* adv = NimBLEDevice::getAdvertising();
@@ -351,13 +389,16 @@ static void onKnockEvent(bool doubleKnock) {
     g_menu.render(display);
     return;
   }
-  bleproto::TapKind kind = bleproto::classifyKnock(doubleKnock, g_tapMode);
-  if (kind == bleproto::TapKind::SHUTTER) {
-    // Double-knock in camera mode == photo shutter. Notify only; the
-    // App takes the photo. No navigation happens on a shutter.
-    notifyTap(kind);
+  if (g_menu.page() == menu::Page::CAMERA_SHUTTER) {
+    // Photo mode: knocks do NOTHING (2026-11-23 anti-misfire rule —
+    // only the on-screen photo button takes a photo). No notify, no
+    // navigation, so a knock can neither fire the shutter nor leave
+    // the page while the phone camera is open.
     return;
   }
+  // classifyKnock() never returns SHUTTER any more (2026-11-23:
+  // double-knock shutter cancelled); a double knock is a knock.
+  bleproto::TapKind kind = bleproto::classifyKnock(doubleKnock, g_tapMode);
   notifyTap(kind);  // tap / knock are also reported to the App
   if (doubleKnock) {
     g_menu.confirm();
@@ -378,7 +419,7 @@ static void pollImuKnock() {
   g_prevKnockMs = g_lastKnockMs;
   g_lastKnockMs = nowMs;
   // NOTE: a single knock is reported immediately as TAP; if a second
-  // spike lands inside the window it is reported as SHUTTER/KNOCK.
+  // spike lands inside the window it is reported as KNOCK.
   // The App de-duplicates by sequence number (see README联调).
   onKnockEvent(doubleKnock);
 }
@@ -387,9 +428,14 @@ static void pollImuKnock() {
 // TODO(HW): bind the real CST9217 driver. Touch is BEST-EFFORT ONLY:
 // a tap opens the menu from the dial home (design: "点表盘开菜单") and
 // advances elsewhere, exactly like a single knock; touch is never used
-// for scoring, shutter, password entry confirmation, or any other
-// critical action (touch reads are unstable).
-static bool pollTouchTap() {
+// for scoring, password entry confirmation, or any other critical
+// action (touch reads are unstable). THE ONE EXCEPTION (2026-11-23,
+// Jackson): the on-screen photo button — on the photo-button page a
+// tap inside the big button sends the shutter ("S:press", b109).
+// The driver must report the touch POINT (x, y) via pollTouchPoint();
+// until it is bound the stub below reports no touch.
+static bool pollTouchPoint(int& x, int& y) {
+  (void)x; (void)y;
   return false;  // stub: no touch event. Replace with CST9217 readout.
 }
 
@@ -487,12 +533,19 @@ void loop() {
   uint32_t nowMs = millis();
 
   pollImuKnock();
-  if (pollTouchTap()) {
-    g_menu.tap();
+  int touchX = 0, touchY = 0;
+  if (pollTouchPoint(touchX, touchY)) {
+    g_menu.touchAt(touchX, touchY);
     g_menu.render(display);
   }
   if (pollTouchLongPress()) {
     g_menu.back();
+    g_menu.render(display);
+  }
+
+  // Photo button pressed on the badge -> notify "S:press" (b109).
+  if (g_menu.takeShutterPress()) {
+    notifyShutterPress();
     g_menu.render(display);
   }
 

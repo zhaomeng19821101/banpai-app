@@ -9,10 +9,24 @@
 //   TAP   b106  bidirectional
 //           App -> badge  write  "M:camera" | "M:normal"
 //           badge -> App  notify "T:<kind>|<timestamp>|<seq>"
-//           kind: tap | knock | shutter ; double-knock == shutter
+//           kind: tap | knock  (shutter is DEPRECATED, see below)
+//   CAMERA b109 bidirectional (added 2026-11-23, Jackson: photo key
+//           replaces double-knock shutter — see TAP note)
+//           badge -> App  notify "S:press|<timestamp>|<seq>"
+//           App -> badge  write  "S:done" | "S:done|<timestamp>"
 //   INFO  b107  badge -> App  notify JSON
 //           {"name","fw","batt","chg","model","serial"}
 //   TIME  b108  App -> badge  write  "T:<unixSec>|<tzMinutes>|<style0-4>"
+//
+// Photo shutter (2026-11-23, Jackson): the shutter moved OFF the knock
+// gesture and onto an on-screen photo button. When the phone opens its
+// camera it writes "M:camera" (b106, reused); the badge auto-opens its
+// photo-button page; tapping the button notifies "S:press" on CAMERA
+// (b109); the App takes the photo and writes back "S:done" on b109,
+// and the badge shows "PHOTO TAKEN". Knocks NEVER take a photo — in
+// photo mode a knock does nothing at all (anti-misfire). The old
+// "T:shutter" TAP notify and TapKind::SHUTTER are DEPRECATED: kept on
+// the wire only so old App builds still parse them, never emitted.
 //
 // Petal canon (locked): the four petals are 冰 / 雪 / 乐 / 花.
 // 静 belongs to the fifth petal only. The easter egg only ever
@@ -31,6 +45,7 @@
 #define BANPAI_CHR_TAP    "0000b106-0000-1000-8000-00805f9b34fb"
 #define BANPAI_CHR_INFO   "0000b107-0000-1000-8000-00805f9b34fb"
 #define BANPAI_CHR_TIME   "0000b108-0000-1000-8000-00805f9b34fb"
+#define BANPAI_CHR_CAMERA "0000b109-0000-1000-8000-00805f9b34fb"
 
 #define BANPAI_DEVICE_NAME "Banpai-Badge"
 #define BANPAI_MODEL       "waveshare-1.75"
@@ -39,7 +54,12 @@
 namespace bleproto {
 
 // ---------------------------------------------------------------- Types
-enum class TapKind : uint8_t { TAP = 0, KNOCK = 1, SHUTTER = 2 };
+// TapKind::SHUTTER is DEPRECATED (2026-11-23, Jackson: double-knock
+// shutter cancelled, photo moved to the on-screen photo button, see
+// CAMERA b109 above). The value is kept so the wire format stays
+// compatible; classifyKnock() never returns it and main.cpp never
+// emits a T:shutter notify.
+enum class TapKind : uint8_t { TAP = 0, KNOCK = 1, SHUTTER = 2 /* DEPRECATED, never emitted */ };
 enum class TapMode : uint8_t { NORMAL = 0, CAMERA = 1 };
 
 struct StateFrame {
@@ -92,14 +112,20 @@ uint8_t parseDialCode(const String& payload);
 // --- assembling (badge -> App) ----------------------------------------
 String buildScore(const ScoreFrame& f);
 String buildTapNotify(TapKind kind, uint32_t timestamp, uint32_t seq);
+// CAMERA b109: badge -> App shutter press, "S:press|<ts>|<seq>".
+String buildShutterPress(uint32_t timestamp, uint32_t seq);
+// CAMERA b109: App -> badge photo-taken ack, "S:done" or
+// "S:done|<timestamp>". Returns false on malformed input.
+bool parseShutterDone(const String& payload, uint32_t* timestampOut = nullptr);
 String buildInfoJson(int battPercent, bool charging, const String& serial);
 String buildOtaStatus(const char* status, const char* detail = nullptr);
 
 // --- helpers ------------------------------------------------------------
+// Double-knock is NEVER a shutter any more (2026-11-23): it is just a
+// knock, in every mode. The mode argument is kept for call-site
+// compatibility and ignored. Photo mode knocks are dropped by the
+// caller (main.cpp) before this is even reached.
 TapKind classifyKnock(bool doubleKnock, TapMode mode);
-// Double-knock in camera mode == shutter. Single knock in camera mode
-// is still reported as knock (App decides); in normal mode a knock is
-// just a knock.
 bool isValidDial(uint8_t dial, bool goldUnlocked);
 
 } // namespace bleproto

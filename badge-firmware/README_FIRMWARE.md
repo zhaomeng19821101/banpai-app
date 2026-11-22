@@ -62,18 +62,18 @@ badge-firmware/
 | SCORE | b103 | 吧唧 → App，通知 | `"G:<游戏>\|<难度>\|<分数>\|<时间戳>"`，游戏 `bell` / `ice` / `stick` |
 | OTA | b104 | 双向 | 控制：`"OTA:START:<总字节>:<crc32hex>"` / `"OTA:ABORT"` / `"OTA:DONE"`；吧唧回 `"OTA:READY"` / `"OTA:OK"` / `"OTA:ERR:<码>"` |
 | OTA_DATA | b105 | 双向 | 二进制分片（固件 OTA 用；表盘 / 壁纸位图走同一通道时由 App 加前缀区分，见“待定”） |
-| TAP | b106 | 双向 | App 写 `"M:camera"` / `"M:normal"`；吧唧通知 `"T:<kind>\|<时间戳>\|<序号>"`，kind `tap` / `knock` / `shutter`；**敲两下 = 拍照快门** |
+| TAP | b106 | 双向 | App 写 `"M:camera"` / `"M:normal"`（相机开／关，复用）；吧唧通知 `"T:<kind>\|<时间戳>\|<序号>"`，kind 只剩 `tap` / `knock`；`shutter` 已废弃（2026-11-23，见 CAMERA） |
+| CAMERA | b109 | 双向 | 拍照键（2026-11-23，Jackson 定，替代敲两下快门）：吧唧通知 `"S:press\|<时间戳>\|<序号>"`；App 回 `"S:done"`（或 `"S:done\|<时间戳>"`），吧唧显示 `PHOTO TAKEN` |
 | INFO | b107 | 吧唧 → App，通知 | JSON `{"name","fw","batt","chg","model","serial"}`，连接时 + 每 60 s 推一次 |
 | TIME | b108 | App → 吧唧，写 | `"T:<unix秒>\|<时区分钟>\|<样式0-4>"` |
 
 敲击语义（`main.cpp` + `ble_protocol.cpp` 的 `classifyKnock`）：
 
 - 敲击来自 QMI8658 加速度尖峰（阈值 1.8 g，双敲窗口 350 ms，去抖 120 ms）。
-- 拍照模式（`M:camera`）下双敲 = `shutter`，只通知 App，不做菜单导航。
+- 拍照键（2026-11-23，Jackson 定）：写 TAP `"M:camera"` 后吧唧自动弹出拍照键页（保存当前页），点大圆拍照键 → 通知 `"S:press|..."`（CAMERA b109）→ App 拍照后回 `"S:done"`，吧唧显示 `PHOTO TAKEN`；写 `"M:normal"` 回到保存的页。**拍照模式下敲击什么都不做**（防误触）；敲两下快门已取消，`T:shutter` 永不再发。
 - 游戏进行中敲击 = 记分，不做导航；其他页面单击敲 = 下一项，双敲 = 确认 / 进入。
-- CST9217 触摸只做同义捷径（单击 = 下一项），永不用于记分、快门、密码确认等关键动作。
-- 已知粗糙点：单击会立即以 `tap` 上报，若 350 ms 内又来一下再报 `shutter` /
-  `knock`；App 侧请按序号去重（`T:<kind>|<ts>|<seq>` 的 seq 单调递增）。
+- CST9217 触摸只做同义捷径（单击 = 下一项），永不用于记分、密码确认等关键动作。**唯一例外（2026-11-23）：拍照键页点屏幕拍照键拍照。**
+- 已知粗糙点：单击会立即以 `tap` 上报，若 350 ms 内又来一下再报 `knock`；App 侧请按序号去重（`T:<kind>|<ts>|<seq>` 的 seq 单调递增）。
   有实板后可改为“等窗口结束再上报单击”，以一次上报为准。
 
 ## 表盘（30 款，全在 `dial.h`）
@@ -195,7 +195,7 @@ pio device monitor -e waveshare-1.75   # 115200
 3. 写 DIAL `"03"` 换表盘：吧唧只换码；位图需 App 随后下发（OTA_DATA 通道），
    否则首页显示占位表盘（四瓣标记 + 时间层），并在日志里可见。
    换表盘全程需手机在旁 BLE 连接。
-4. 写 TAP `"M:camera"`，敲吧唧两下 → 吧唧通知 `"T:shutter|..."` → App 拍照。
+4. 写 TAP `"M:camera"` → 吧唧自动弹出拍照键页，点大圆拍照键 → 吧唧通知 `"S:press|..."`（CAMERA b109）→ App 拍照后回 `"S:done"`，吧唧显示 `PHOTO TAKEN`。写 `"M:normal"` 回到之前的页。拍照模式下敲击不拍。
    写 `"M:normal"` 恢复普通模式。
 5. 进小游戏敲吧唧 → 结束时吧唧通知 SCORE `"G:bell|1|120|<ts>"`，App 记分。
 6. 语音留言页按住说话、松开发送；花园页有信时显示 `LETTER WAITING`。
@@ -254,8 +254,8 @@ UI 结构已落固件，以下是仍做不到的部分（不谎称已完成）�
       ESP32-S3-Touch-AMOLED-1.75，核对原理图引脚
       （`platformio.ini` 里的 LCD / 触摸 / IMU / AXP 引脚是公开资料默认值，
       未在实板上验证过）。
-- [ ] App 联调：DIAL / STATE / TIME / TAP / SCORE / INFO 七组帧逐项过；
-      敲两下拍照端到端；OTA 一次成功 + 一次坏镜像回滚实测；语音留言的
+- [ ] App 联调：DIAL / STATE / TIME / TAP / SCORE / INFO / CAMERA 八组帧逐项过；
+      拍照键端到端（M:camera 弹出 → 点键 S:press → App 拍照 → S:done 显示 PHOTO TAKEN）；OTA 一次成功 + 一次坏镜像回滚实测；语音留言的
       音频编码与分片格式、派对房间的信令格式仍待定（只留了接口与注释，
       未编造格式）。
 
