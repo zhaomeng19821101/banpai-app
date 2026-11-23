@@ -39,8 +39,10 @@
 #include "storage.h"
 
 // ------------------------------------------------------------------ pins
-// Pin numbers come from platformio.ini build flags (Waveshare defaults,
-// NOT yet verified on a real board — check the schematic first).
+// Pin numbers come from platformio.ini build flags — verified
+// 2026-11-23 against the Waveshare 1.75 schematic (QSPI D0-D3 =
+// 4/5/6/7, SCK 38, CS 12, RST 39; touch INT 11, RST 40; I2C 15/14).
+// Still unproven on a real board: first flash is the proof.
 #ifndef BANPAI_PIN_LCD_CS
 #define BANPAI_PIN_LCD_CS 12
 #endif

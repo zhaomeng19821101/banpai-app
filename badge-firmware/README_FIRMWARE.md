@@ -252,8 +252,9 @@ UI 结构已落固件，以下是仍做不到的部分（不谎称已完成）�
 - [ ] PlatformIO：本机现已装好（`~/workspace/.pio-venv`，6.2.0），
       本地 `pio run` 结果见下；实板 + USB 线：Waveshare
       ESP32-S3-Touch-AMOLED-1.75，核对原理图引脚
-      （`platformio.ini` 里的 LCD / 触摸 / IMU / AXP 引脚是公开资料默认值，
-      未在实板上验证过）。
+      （`platformio.ini` 里的 LCD / 触摸 / IMU 引脚已于 2026-11-23
+      按 Waveshare 1.75 原理图核对修正；AXP IRQ 在 TCA9554
+      EXIO5 上、不是 GPIO；仍未在实板上验证过）。
 - [ ] App 联调：DIAL / STATE / TIME / TAP / SCORE / INFO / CAMERA 八组帧逐项过；
       拍照键端到端（M:camera 弹出 → 点键 S:press → App 拍照 → S:done 显示 PHOTO TAKEN）；OTA 一次成功 + 一次坏镜像回滚实测；语音留言的
       音频编码与分片格式、派对房间的信令格式仍待定（只留了接口与注释，
